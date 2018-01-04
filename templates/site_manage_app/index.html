@@ -1,10 +1,112 @@
-{% extends "site_manage_app/base.html"%}
-{% block body_block%}
+{% extends "site_manage_app/base.html"%} {% block body_block%}
 <h1>ようこそ、Life-Navigatorへ</h1>
 <br/>
-<br/>
-{% if user.is_authenticated %}
-{% else %}
-<a href="{% url 'login' %}?next=/">ログイン画面へ</a>
-{% endif %}
-{% endblock %}
+<br/> {% if user.is_authenticated %} {% else %}
+<a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
+<div id="calendar"></div>
+{% endblock %} {% block script %}
+<script>
+  $(function() {
+    $('#calendar').fullCalendar({
+        //参考ページ　https://www.arms-soft.co.jp/blog/1061/
+        //ヘッダーの設定
+        header: {
+          left: 'today month,agendaWeek,agendaDay',
+          center: 'title',
+          right: 'prev next'
+        },
+        firstDay: 1,
+        views: {
+          basic: {
+            titleFormat: 'M/D ddd',
+            columnFormat:'M/D ddd'
+
+            // options apply to basicWeek and basicDay views
+          },
+          agenda: {
+            titleFormat: 'M/D ddd',
+            columnFormat:'M/D ddd'
+
+            // options apply to agendaWeek and agendaDay views
+          },
+          week: {
+            titleFormat: 'M/D ddd',
+            columnFormat:'M/D ddd'
+
+            // options apply to basicWeek and agendaWeek views
+          },
+          day: {
+            titleFormat: 'M/D ddd',
+            columnFormat:'M/D ddd'
+            // options apply to basicDay and agendaDay views
+          }
+        },
+
+        timeFormat: 'H:mm', // uppercase H for 24-hour clock
+        axisFormat: 'H:mm', //時間軸に表示する時間の表示フォーマットを指定する
+        editable: true, // イベントを編集するか
+
+        allDaySlot: false, // 終日表示の枠を表示するか
+
+        eventDurationEditable: false, // イベント期間をドラッグしで変更するかどうか
+
+        slotEventOverlap: false, // イベントを重ねて表示するか
+
+        selectable: true,
+
+        selectHelper: true,
+
+        select: function(start, end, allDay) {
+
+          日の枠内を選択したときの処理
+
+        },
+
+        eventClick: function(calEvent, jsEvent, view) {
+
+          イベントをクリックしたときの処理
+
+        },
+
+        droppable: true, // イベントをドラッグできるかどうか
+        events: [
+
+          {
+
+            title: 'イベント',
+
+            start: '2017-02-14'
+
+          }
+
+        ],
+
+
+      }
+
+    );
+  });
+</script>
+<style>
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .fc-sun {
+    color: #FF0000;
+  }
+
+  .fc-sat {
+    color: #0000FF;
+  }
+</style>
+
+{% endblock script%}

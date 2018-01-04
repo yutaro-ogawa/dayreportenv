@@ -14,10 +14,11 @@
   <!-- fulcalendarの読み込み-->
   <link href="{% static 'fullcalendar380/css/fullcalendar.css' %}" rel='stylesheet' />
   <link href="{% static 'fullcalendar380/css/fullcalendar.print.css' %}" rel='stylesheet' media='print' />
-  <script src="{% static 'fullcalendar380/js/moment.min.js' %}"></script>
   <script src="{% static 'fullcalendar380/js/jquery.min.js' %}"></script>
-  <script src="{% static 'fullcalendar380/js/fullcalendar.min.js' %}"></script>
+  <script src="{% static 'fullcalendar380/js/moment.min.js' %}"></script>
   <script src="{% static 'fullcalendar380/js/fullcalendar.js' %}"></script>
+  <script src="{% static 'fullcalendar380/locale/ja.js' %}"></script>
+  <script src="{% static 'fullcalendar380/js/jquery-ui.min.js' %}"></script>
   <!-- 自分で設定したファイルの読み込み-->
   <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
   {% block script %}{% endblock script%}
