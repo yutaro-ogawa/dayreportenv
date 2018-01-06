@@ -11,7 +11,7 @@
 <div id="calendar"></div>
 
 <!-- モーダル・ダイアログ -->
-<div class="modal fade" id="sampleModal" tabindex="-1">
+<div class="modal fade" id="inputModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -31,10 +31,37 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="modal-save" class="btn btn-primary" data-dismiss="modal">登録</button>
+        <button type="button" id="inputModal-save" class="btn btn-primary" data-dismiss="modal">登録</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-
+<!-- データ引渡し -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+        <h4 class="modal-title">目標の振り返り</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInput1">目標内容</label>
+            <input type="text" class="form-control" id="editModalInput1" placeholder="目標内容">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="editModal-0" class="btn btn-primary" data-dismiss="modal">内容更新</button>
+        <button type="button" id="editModal-1" class="btn btn-danger" data-dismiss="modal">目標削除</button>
+        <hr>
+        <button type="button" id="editModal-2" class="btn btn-success" data-dismiss="modal">〇</button>
+        <button type="button" id="editModal-3" class="btn btn-info" data-dismiss="modal">△</button>
+        <button type="button" id="editModal-4" class="btn btn-warning" data-dismiss="modal">✖</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
       </div>
     </div>
   </div>
