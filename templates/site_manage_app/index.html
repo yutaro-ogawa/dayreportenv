@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{% static 'fullcalendar380/css/custom.css' %}"></link>
 {% endblock script%} {% block body_block%}
 
-<h1>ようこそ、Life-Navigatorへ</h1>
+<h1>ようこそ、Life-Naviへ</h1>
 <br/>
 <br/> {% if user.is_authenticated %} {% else %}
 <a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" id="inputModal-save" class="btn btn-primary" data-dismiss="modal">登録</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+        <button type="button" id="inputModal-cancel" class="btn btn-default" data-dismiss="modal">キャンセル</button>
       </div>
     </div>
   </div>
@@ -55,12 +55,12 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="editModal-0" class="btn btn-primary" data-dismiss="modal">内容更新</button>
-        <button type="button" id="editModal-1" class="btn btn-danger" data-dismiss="modal">目標削除</button>
+        <button type="button" id="editModal-1" class="btn btn-primary" data-dismiss="modal">内容更新</button>
+        <button type="button" id="editModal-2" class="btn btn-danger" data-dismiss="modal">目標削除</button>
         <hr>
-        <button type="button" id="editModal-2" class="btn btn-success" data-dismiss="modal">〇</button>
-        <button type="button" id="editModal-3" class="btn btn-info" data-dismiss="modal">△</button>
-        <button type="button" id="editModal-4" class="btn btn-warning" data-dismiss="modal">✖</button>
+        <button type="button" id="editModal-3" class="btn btn-success" data-dismiss="modal">〇</button>
+        <button type="button" id="editModal-4" class="btn btn-info" data-dismiss="modal">△</button>
+        <button type="button" id="editModal-5" class="btn btn-warning" data-dismiss="modal">✖</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
       </div>
     </div>

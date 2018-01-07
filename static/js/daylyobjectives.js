@@ -1,6 +1,7 @@
 $(function() {
-  var calEvent2=undefined; // モーダル操作用のグローバル変数
-
+  var calEvent_global = undefined; // モーダル操作用のグローバル変数
+  var exists_event_global = false; // イベントのグローバル変数
+  var event_id_global = 1; // eventのid
   $('#calendar').fullCalendar({
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
       //ヘッダーの設定
@@ -51,77 +52,109 @@ $(function() {
       selectHelper: true,
 
       select: function(start, end, jsEvent, view) {
-
-        //すでに登録されている場合の処理を書かないといけない
-
         //日の枠内を選択したときの処理
-        $('#inputModal').modal();
-        $("#inputModal-save").click(function() {
-
-          var input1 = $("#modalInput1").val();
-          var input2 = $("#modalInput2").val();
-          if (input1) {
-            eventData = {
-              title: '最重要：' + input1,
-              start: start,
-              end: end,
-            };
-            $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+        //現在ある全てのイベントを取得
+        var selectedEvents = $('#calendar').fullCalendar('clientEvents', function(clEvent) {
+          if (moment(start).format("YYYY-MM-DD") == moment(clEvent.start).format("YYYY-MM-DD")) {
+            //すでに登録されている場合の処理
+            console.log("すでにイベント登録済み");
+            exists_event_global = true;
+            return true;
           }
-          if (input2) {
-            eventData = {
-              title: '理想 ：' + input2,
-              start: start,
-              end: end,
-            };
-            $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-
-          }
-          $('.modal').find('input').val('');
-          $('#inputModal-save').unbind();
-          $('#calendar').fullCalendar('unselect');
         });
 
-        //alert(start.toISOString()+' is clicked!' );
+
+        if (exists_event_global == false) {
+          //その日のイベントがないなら登録できる
+
+          $('#inputModal').modal();
+          $("#inputModal-cancel").click(function() {
+            // モーダル内のキャンセルボタン
+            $('.modal').find('input').val('');
+            $('#inputModal-save').unbind();
+            $('#calendar').fullCalendar('unselect');
+          });
+
+          $("#inputModal-save").click(function() {
+            //　モーダル内の登録ボタン
+            var input1 = $("#modalInput1").val();
+            var input2 = $("#modalInput2").val();
+            if (input1) {
+              eventData = {
+                title: '最重要：' + input1,
+                start: start,
+                end: end,
+                id: event_id_global,
+              };
+              event_id_global += 1;
+              $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+            }
+            if (input2) {
+              eventData = {
+                title: '理想 ：' + input2,
+                start: start,
+                end: end,
+                id: event_id_global,
+              };
+              event_id_global += 1;
+              $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+
+            }
+            $('.modal').find('input').val('');
+            $('#inputModal-save').unbind();
+            $('#calendar').fullCalendar('unselect');
+          });
+        } else {
+          exists_event_global = false;
+        }
       },
 
       eventClick: function(calEvent, jsEvent, view) {
-        calEvent2=calEvent;
-      //イベントをクリックしたときの処理
+        calEvent_global = calEvent; //globalパラメータに渡す
+        //イベントをクリックしたときの処理
         $('#editModal').on('show.bs.modal', function() {
           document.getElementById("editModalInput1").value = calEvent.title;
         });
         $('#editModal').modal('show');
         //モーダルを閉じる動作は下側で定義
+        $('#calendar').fullCalendar('unselect');
       },
 
       droppable: true, // イベントをドラッグできるかどうか
       events: [{
         title: 'WSI室での活動を始めるWSI室での活動を始めるWSI室での活動を始める',
         start: '2018-01-14',
+        id: 0,
       }],
 
 
     }
 
   );
-  // 以下モーダルで変更ボタンを押したときの動き
-  $("#editModal-2").click(function() {
-    console.log(calEvent2);
-    calEvent2.title = "  〇：" + calEvent2.title.substr(4)
-    $('#calendar').fullCalendar('updateEvent', calEvent2);
+  // 以下モーダルでボタンを押したときの動き
+  $("#editModal-1").click(function() {
+    calEvent_global.title = document.getElementById("editModalInput1").value;
+    $('#calendar').fullCalendar('updateEvent', calEvent_global);
   });
 
+  $("#editModal-2").click(function() {
+    $('#calendar').fullCalendar("removeEvents", calEvent_global.id); //イベント（予定）の削除
+  });
+
+
   $("#editModal-3").click(function() {
-    console.log(calEvent2);
-    calEvent2.title = "  △：" + calEvent2.title.substr(4)
-    $('#calendar').fullCalendar('updateEvent', calEvent2);
+    calEvent_global.title = "  〇：" + calEvent_global.title.substr(4)
+    $('#calendar').fullCalendar('updateEvent', calEvent_global);
   });
 
   $("#editModal-4").click(function() {
-    console.log(calEvent2);
-    calEvent2.title = "  ✖：" + calEvent2.title.substr(4)
-    $('#calendar').fullCalendar('updateEvent', calEvent2);
+    calEvent_global.title = "  △：" + calEvent_global.title.substr(4)
+    $('#calendar').fullCalendar('updateEvent', calEvent_global);
+  });
+
+  $("#editModal-5").click(function() {
+    calEvent_global.title = "  ✖：" + calEvent_global.title.substr(4)
+    $('#calendar').fullCalendar('updateEvent', calEvent_global);
   });
 
 });
