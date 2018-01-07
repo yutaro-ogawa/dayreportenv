@@ -1,7 +1,12 @@
-{% extends "site_manage_app/base.html"%} {% load static %} {% block script %}
+{% extends "site_manage_app/base.html"%}
+{% load static %}
+
+{% block script %}
 <script src="{% static 'js/daylyobjectives.js' %}"></script>
 <link rel="stylesheet" href="{% static 'fullcalendar380/css/custom.css' %}"></link>
-{% endblock script%} {% block body_block%}
+{% endblock script%}
+
+{% block body_block%}
 
 <h1>ようこそ、Life-Naviへ</h1>
 <br/>
@@ -54,15 +59,19 @@
           </div>
         </form>
       </div>
+
       <div class="modal-footer">
-        <button type="button" id="editModal-1" class="btn btn-primary" data-dismiss="modal">内容更新</button>
-        <button type="button" id="editModal-2" class="btn btn-danger" data-dismiss="modal">目標削除</button>
-        <hr>
-        <button type="button" id="editModal-3" class="btn btn-success" data-dismiss="modal">〇</button>
-        <button type="button" id="editModal-4" class="btn btn-info" data-dismiss="modal">△</button>
-        <button type="button" id="editModal-5" class="btn btn-warning" data-dismiss="modal">✖</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
-      </div>
+              <p>達成度：
+              <button type="button" id="editModal-3" class="btn btn-success" data-dismiss="modal">〇</button>
+              <button type="button" id="editModal-4" class="btn btn-info" data-dismiss="modal">△</button>
+              <button type="button" id="editModal-5" class="btn btn-warning" data-dismiss="modal">✖</button>
+            </p>
+
+              <hr>
+              <button type="button" id="editModal-1" class="btn btn-primary" data-dismiss="modal">内容更新</button>
+              <button type="button" id="editModal-2" class="btn btn-danger" data-dismiss="modal">目標削除</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+            </div>
     </div>
   </div>
 </div>

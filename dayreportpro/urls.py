@@ -16,15 +16,17 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-#ユーザーの新規登録
+# ユーザーの新規登録
 from django.views.generic import TemplateView
 from site_manage_app.views import Register
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^register/success/$', TemplateView.as_view(template_name="registration/register_success.html"), name="register-success"),
+    url(r'^register/success/$', TemplateView.as_view(
+        template_name="registration/register_success.html"), name="register-success"),
     url(r'^register$', Register.as_view(), name="register"),
-    url(r'^', include('site_manage_app.urls')), # 追加
-    url(r'^', include('django.contrib.auth.urls')), # ログイン、ログアウト用
+    url(r'^', include('site_manage_app.urls')),  # 追加
+    url(r'^', include('django.contrib.auth.urls')),  # ログイン、ログアウト用
+    url(r'^', include('dayreport_app.urls'), name='dayreport_app'),  # 追加
 ]
