@@ -4,7 +4,7 @@
 $(function() {
   var calEvent_global = undefined; // モーダル操作用のグローバル変数
   var exists_event_global = false; // イベントのグローバル変数
-  var event_id_global = 1; // eventのid
+  var event_id_global = 102; // eventのid
 
   $('#calendar').fullCalendar({
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
@@ -88,12 +88,14 @@ $(function() {
             //　モーダル内の登録ボタン
             var input1 = $("#modalInput1").val();
             var input2 = $("#modalInput2").val();
+            var username =$("#username").val();
             if (input1) {
               eventData_JSON = {
                 title: '最重要：' + input1,
                 start: start,
                 end: end,
                 id: event_id_global,
+                //username: username,
               };
               event_id_global += 1;
               var te ="{% url 'dayreport_app:api_calevent_create' %}";
@@ -108,6 +110,7 @@ $(function() {
                 start: start,
                 end: end,
                 id: event_id_global,
+                //username: username,
               };
               event_id_global += 1;
               $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
@@ -232,9 +235,11 @@ function calEvent2JSON(calEvent) {
   //POSTでEVENTを追加
   function calEvent_POST(eventData_JSON) {
     $.ajax({
-      url: "http://127.0.0.1:8000/api/calevent/create",
-      data: JSON.stringify(eventData_JSON),
       method: "POST",
+      url: "http://127.0.0.1:8000/api/calevent/",
+      dataType: "json",
+      data: JSON.stringify(eventData_JSON),
+      contentType: "application/json",
       success: function(data) {
         console.log(data)
       },

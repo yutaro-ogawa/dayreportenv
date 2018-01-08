@@ -1,9 +1,5 @@
-from django.conf.urls import url
-from .views import CalEventCreateAPIView
+from rest_framework import routers
+from .views import CalEventViewSet
 
-app_name = 'dayreport_app'
-
-urlpatterns = [
-    url(r'^api/calevent/create$', CalEventCreateAPIView.as_view(),
-        name='api_calevent_create'),  # /api/calevent/create/
-]
+router = routers.DefaultRouter()
+router.register(r'calevent',CalEventViewSet)

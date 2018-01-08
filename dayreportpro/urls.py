@@ -20,6 +20,8 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from site_manage_app.views import Register
 
+# api
+from dayreport_app.urls import router as calevent_router
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,5 +30,5 @@ urlpatterns = [
     url(r'^register$', Register.as_view(), name="register"),
     url(r'^', include('site_manage_app.urls')),  # 追加
     url(r'^', include('django.contrib.auth.urls')),  # ログイン、ログアウト用
-    url(r'^', include('dayreport_app.urls'), name='dayreport_app'),  # 追加
+    url(r'^api/', include(calevent_router.urls)), # 追加
 ]
