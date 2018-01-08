@@ -4,7 +4,7 @@
 $(function() {
   var calEvent_global = undefined; // モーダル操作用のグローバル変数
   var exists_event_global = false; // イベントのグローバル変数
-  var event_id_global = 102; // eventのid
+  var event_id_global = 340; // eventのid
 
   $('#calendar').fullCalendar({
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
@@ -43,7 +43,7 @@ $(function() {
 
       timeFormat: 'H:mm', // uppercase H for 24-hour clock
       axisFormat: 'H:mm', //時間軸に表示する時間の表示フォーマットを指定する
-      editable: true, // イベントを編集するか
+      editable: false, // イベントを編集するか、ドラッグできる
 
       allDaySlot: false, // 終日表示の枠を表示するか
 
@@ -88,7 +88,7 @@ $(function() {
             //　モーダル内の登録ボタン
             var input1 = $("#modalInput1").val();
             var input2 = $("#modalInput2").val();
-            var username =$("#username").val();
+            var username = $("#username").val();
             if (input1) {
               eventData_JSON = {
                 title: '最重要：' + input1,
@@ -98,10 +98,7 @@ $(function() {
                 //username: username,
               };
               event_id_global += 1;
-              var te ="{% url 'dayreport_app:api_calevent_create' %}";
-              console.log(te);
               $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
-              console.log(JSON.stringify(eventData_JSON, null, "\t"));
               calEvent_POST(eventData_JSON);
             }
             if (input2) {
@@ -114,7 +111,7 @@ $(function() {
               };
               event_id_global += 1;
               $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
-
+              calEvent_POST(eventData_JSON);
             }
             $('.modal').find('input').val('');
             $('#inputModal-save').unbind();
@@ -151,30 +148,37 @@ $(function() {
   $("#editModal-1").click(function() {
     calEvent_global.title = document.getElementById("editModalInput1").value;
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
-
+    eventData_JSON = calEvent2JSON(calEvent_global);
+    calEvent_PUT(eventData_JSON);
   });
 
   $("#editModal-2").click(function() {
     $('#calendar').fullCalendar("removeEvents", calEvent_global.id); //イベント（予定）の削除
+    eventData_JSON = calEvent2JSON(calEvent_global);
+    calEvent_PUT(eventData_JSON);
   });
 
 
   $("#editModal-3").click(function() {
     calEvent_global.title = "  〇：" + calEvent_global.title.substr(4)
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
-    //eventData_JSON = calEvent2JSON(calEvent_global);
-    //console.log(JSON.stringify(eventData_JSON, null, "\t"));
+    eventData_JSON = calEvent2JSON(calEvent_global);
+    calEvent_PUT(eventData_JSON);
 
   });
 
   $("#editModal-4").click(function() {
     calEvent_global.title = "  △：" + calEvent_global.title.substr(4)
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
+    eventData_JSON = calEvent2JSON(calEvent_global);
+    calEvent_PUT(eventData_JSON);
   });
 
   $("#editModal-5").click(function() {
     calEvent_global.title = "  ✖：" + calEvent_global.title.substr(4)
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
+    eventData_JSON = calEvent2JSON(calEvent_global);
+    calEvent_PUT(eventData_JSON);
   });
 
 });
@@ -198,54 +202,71 @@ function calEvent2JSON(calEvent) {
 
 
 //$(document).ready(function() {
-  //CSRF_tokenを取得する
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
+//CSRF_tokenを取得する
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
       }
     }
-    return cookieValue;
   }
+  return cookieValue;
+}
 
-  //CSRFのいらないmethodの定義
-  function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-  }
+//CSRFのいらないmethodの定義
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
 
-  //AJAXの前にcsrftokenをセット
-  $.ajaxSetup({
-    crossDomain: false, // obviates need for sameOrigin test
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type)) {
-        var csrftoken = getCookie('csrftoken');
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
+//AJAXの前にcsrftokenをセット
+$.ajaxSetup({
+  crossDomain: false, // obviates need for sameOrigin test
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type)) {
+      var csrftoken = getCookie('csrftoken');
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
     }
-  });
-
-  //POSTでEVENTを追加
-  function calEvent_POST(eventData_JSON) {
-    $.ajax({
-      method: "POST",
-      url: "http://127.0.0.1:8000/api/calevent/",
-      dataType: "json",
-      data: JSON.stringify(eventData_JSON),
-      contentType: "application/json",
-      success: function(data) {
-        console.log(data)
-      },
-      error: function(data) {
-        console.log("Ajax create Failed")
-      }
-    })
   }
+});
+
+//POSTでEVENTを追加
+function calEvent_POST(eventData_JSON) {
+  $.ajax({
+    method: "POST",
+    url: "./api/calevent/",
+    dataType: "json",
+    data: JSON.stringify(eventData_JSON),
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data)
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+//PUTでEVENTを編集
+function calEvent_PUT(eventData_JSON) {
+  $.ajax({
+    method: "PUT",
+    url: "./api/calevent/" + eventData_JSON.id + "/",
+    dataType: "json",
+    data: JSON.stringify(eventData_JSON),
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data)
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
 //});
