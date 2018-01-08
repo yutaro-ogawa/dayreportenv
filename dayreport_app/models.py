@@ -5,10 +5,10 @@ from django.core.urlresolvers import reverse
 
 
 class CalEvent(models.Model):
+    #id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=512)
     start = models.CharField(max_length=512)
     end = models.CharField(max_length=512)
-    id = models.IntegerField(primary_key=True)
     created_date = models.DateField(auto_now_add=True)
     username = models.ForeignKey(
         User, blank=True, null=True, related_name="writername")

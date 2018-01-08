@@ -4,7 +4,7 @@
 $(function() {
   var calEvent_global = undefined; // モーダル操作用のグローバル変数
   var exists_event_global = false; // イベントのグローバル変数
-  var event_id_global = 340; // eventのid
+
 
   $('#calendar').fullCalendar({
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
@@ -94,24 +94,20 @@ $(function() {
                 title: '最重要：' + input1,
                 start: start,
                 end: end,
-                id: event_id_global,
-                //username: username,
               };
-              event_id_global += 1;
-              $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
               calEvent_POST(eventData_JSON);
+              //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
             }
             if (input2) {
               eventData_JSON = {
                 title: '理想 ：' + input2,
                 start: start,
                 end: end,
-                id: event_id_global,
+                //id: event_id_global,
                 //username: username,
               };
-              event_id_global += 1;
-              $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
               calEvent_POST(eventData_JSON);
+              //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
             }
             $('.modal').find('input').val('');
             $('#inputModal-save').unbind();
@@ -155,7 +151,7 @@ $(function() {
   $("#editModal-2").click(function() {
     $('#calendar').fullCalendar("removeEvents", calEvent_global.id); //イベント（予定）の削除
     eventData_JSON = calEvent2JSON(calEvent_global);
-    calEvent_PUT(eventData_JSON);
+    calEvent_Delete(eventData_JSON);
   });
 
 
@@ -245,7 +241,7 @@ function calEvent_POST(eventData_JSON) {
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
     success: function(data) {
-      console.log(data)
+      console.log(data);
     },
     error: function(data) {
       console.log("Ajax create Failed")
@@ -269,4 +265,22 @@ function calEvent_PUT(eventData_JSON) {
     }
   })
 }
+
+//DeleteでEVENTを削除
+function calEvent_Delete(eventData_JSON) {
+  $.ajax({
+    method: "DELETE",
+    url: "./api/calevent/" + eventData_JSON.id + "/",
+    dataType: "json",
+    data: JSON.stringify(eventData_JSON),
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data)
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
 //});
