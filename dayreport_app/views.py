@@ -20,8 +20,13 @@ class CalEventViewSet(viewsets.ModelViewSet):
     #permission_classes = (IsAdmin,)
 
     def get_queryset(self):
+        if "x" in self.request.GET:
+            print(self.request.GET.get("x"))
+
         # ここで、フィルターして自分のだけを表示している
         queryset = CalEvent.objects.filter(username=self.request.user)
+
+
         return queryset
 
     def perform_create(self, serializer):

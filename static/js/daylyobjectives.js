@@ -63,6 +63,7 @@ $(function() {
             //すでに登録されている場合の処理
             console.log("すでにイベント登録済み");
             exists_event_global = true;
+            calEvent_Get(view);
             return true;
           }
 
@@ -276,6 +277,28 @@ function calEvent_Delete(eventData_JSON) {
     contentType: "application/json",
     success: function(data) {
       console.log(data)
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+//Eventを取得する
+function calEvent_Get(view) {
+  var get_url="./api/calevent?x="+(moment(view.start).format("YYYY-MM-DD"));
+  //パラメータで日付をわたす
+
+  $.ajax({
+    method: "GET",
+    url: get_url,
+    dataType: "json",
+    data: "",
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data)
+      $('#calendar').fullCalendar('removeEvents');
+			$('#calendar').fullCalendar('addEventSource', data);
     },
     error: function(data) {
       console.log("Ajax create Failed")
