@@ -10,70 +10,15 @@
 
 <h1>ようこそ、Life-Naviへ</h1>
 <br/>
-<br/> {% if user.is_authenticated %} {% else %}
-<a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
+<br/>
+{% if user.is_authenticated %}
+<a href="{% url 'dayreport_app:dayreport' %}">毎日の目標管理画面へ</a>
 
-<div id="calendar"></div>
-
-<!-- モーダル・ダイアログ -->
-<div class="modal fade" id="inputModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-        <h4 class="modal-title">本日の目標設定</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="exampleInput1">本日の最重要目標を記入してください</label>
-            <input type="text" class="form-control" id="modalInput1" placeholder="最重要目標">
-          </div>
-          <div class="form-group">
-            <label for="exampleInput2">本日の理想的目標を記入してください</label>
-            <input type="text" class="form-control" id="modalInput2" placeholder="理想的目標">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="inputModal-save" class="btn btn-primary" data-dismiss="modal">登録</button>
-        <button type="button" id="inputModal-cancel" class="btn btn-default" data-dismiss="modal">キャンセル</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- データ引渡し -->
-<div class="modal fade" id="editModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-        <h4 class="modal-title">目標の振り返り</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="exampleInput1">目標内容</label>
-            <input type="text" class="form-control" id="editModalInput1" placeholder="目標内容">
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-              <p>達成度：
-              <button type="button" id="editModal-3" class="btn btn-success" data-dismiss="modal">〇</button>
-              <button type="button" id="editModal-4" class="btn btn-info" data-dismiss="modal">△</button>
-              <button type="button" id="editModal-5" class="btn btn-warning" data-dismiss="modal">✖</button>
-            </p>
-
-              <hr>
-              <button type="button" id="editModal-1" class="btn btn-primary" data-dismiss="modal">内容更新</button>
-              <button type="button" id="editModal-2" class="btn btn-danger" data-dismiss="modal">目標削除</button>
-              <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
-            </div>
-    </div>
-  </div>
-</div>
+{% else %}
+<a href="{% url 'login' %}?next=/dayreport">ログイン画面へ</a>
+<br/>
+<br/>
+<p><a href="{% url 'register' %}?next=/dayreport">新規ユーザー登録はこちら</a></p>
+{% endif %}
 
 {% endblock %}

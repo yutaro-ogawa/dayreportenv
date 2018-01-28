@@ -25,10 +25,11 @@ from dayreport_app.urls import router as calevent_router
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('django.contrib.auth.urls')),  # ログイン、ログアウト用
     url(r'^register/success/$', TemplateView.as_view(
         template_name="registration/register_success.html"), name="register-success"),
     url(r'^register$', Register.as_view(), name="register"),
     url(r'^', include('site_manage_app.urls')),  # 追加
-    url(r'^', include('django.contrib.auth.urls')),  # ログイン、ログアウト用
+    url(r'^', include('dayreport_app.urls')),  # 追加    
     url(r'^api/', include(calevent_router.urls)), # 追加
 ]

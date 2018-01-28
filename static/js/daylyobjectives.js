@@ -10,7 +10,8 @@ $(function() {
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
       //ヘッダーの設定
       header: {
-        left: 'today month,agendaWeek,agendaDay',
+        left: 'today',
+        //        left: 'today month,agendaWeek,agendaDay',
         center: 'title',
         right: 'prev next'
       },
@@ -55,6 +56,7 @@ $(function() {
 
       selectHelper: true,
 
+
       select: function(start, end, jsEvent, view) {
         //日の枠内を選択したときの処理
         //現在ある全てのイベントを取得
@@ -62,8 +64,7 @@ $(function() {
           if (moment(start).format("YYYY-MM-DD") == moment(clEvent.start).format("YYYY-MM-DD")) {
             //すでに登録されている場合の処理
             console.log("すでにイベント登録済み");
-            exists_event_global = true;
-            calEvent_Get(view);
+            exists_event_global = false; //true;
             return true;
           }
 
@@ -92,23 +93,25 @@ $(function() {
             var username = $("#username").val();
             if (input1) {
               eventData_JSON = {
-                title: '最重要：' + input1,
+                title: '重要：' + input1,
                 start: start,
                 end: end,
               };
               calEvent_POST(eventData_JSON);
-              //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+              //calEvent_Get(view);
+              $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
             }
             if (input2) {
               eventData_JSON = {
-                title: '理想 ：' + input2,
+                title: '理想：' + input2,
                 start: start,
                 end: end,
                 //id: event_id_global,
                 //username: username,
               };
               calEvent_POST(eventData_JSON);
-              //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+              //calEvent_Get(view);
+              $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
             }
             $('.modal').find('input').val('');
             $('#inputModal-save').unbind();
@@ -129,18 +132,67 @@ $(function() {
         //モーダルを閉じる動作は下側で定義
         $('#calendar').fullCalendar('unselect');
       },
-
-      droppable: true, // イベントをドラッグできるかどうか
-      events: [{
-        title: 'WSI室での活動を始めるWSI室での活動を始めるWSI室での活動を始める',
-        start: '2018-01-14',
-        id: 0,
-      }],
+      droppable: false, // イベントをドラッグできるかどうか
 
 
-    }
+      //
+      googleCalendarApiKey: 'AIzaSyC3pE8ovaTqgOmPPUXmeC4dA5k-Xmwv5zM',
 
-  );
+      //Ajaxで自動取得 eventを自動で描画する
+      eventSources: [{
+          events: function(start, end, timezone, callback) {
+            var get_url = "../api/calevent?start_date=" + (moment(start).format("YYYY-MM-DD")) + "&end_date=" + (moment(end).format("YYYY-MM-DD"));
+            //パラメータで日付をわたす
+            console.log(get_url);
+            $.ajax({
+              method: "GET",
+              url: get_url,
+              dataType: "json",
+              data: "",
+              contentType: "application/json",
+              success: function(data) {
+                var events = [];
+                //$('#calendar').fullCalendar('removeEvents');
+                $('#calendar').fullCalendar('addEventSource', data);
+                callback(events);
+              },
+              error: function(data) {
+                console.log("Ajax create Failed")
+              }
+            })
+          }
+        },
+        //祝日
+
+        {
+          googleCalendarId: 'ja.japanese#holiday@group.v.calendar.google.com',
+          className: 'fc-holiday-event',
+          success: function(events) {
+            $(events.items).each(function() {
+              //this.url = null;
+              //this.items[0].url = null;
+              this.htmlLink= null;
+              console.log(this);
+
+
+              //console.log(this.items[0].htmlLink);
+              //console.log(this.items);
+
+
+            });
+          },
+
+        },
+      ],
+
+
+
+
+    } //  $('#calendar').fullCalendar
+
+  ); //$(function()
+
+
   // 以下モーダルでボタンを押したときの動き
   $("#editModal-1").click(function() {
     calEvent_global.title = document.getElementById("editModalInput1").value;
@@ -157,7 +209,7 @@ $(function() {
 
 
   $("#editModal-3").click(function() {
-    calEvent_global.title = "  〇：" + calEvent_global.title.substr(4)
+    calEvent_global.title = "◯ ：" + calEvent_global.title.substr(3);
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
     eventData_JSON = calEvent2JSON(calEvent_global);
     calEvent_PUT(eventData_JSON);
@@ -165,14 +217,14 @@ $(function() {
   });
 
   $("#editModal-4").click(function() {
-    calEvent_global.title = "  △：" + calEvent_global.title.substr(4)
+    calEvent_global.title = "△ ：" + calEvent_global.title.substr(3);
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
     eventData_JSON = calEvent2JSON(calEvent_global);
     calEvent_PUT(eventData_JSON);
   });
 
   $("#editModal-5").click(function() {
-    calEvent_global.title = "  ✖：" + calEvent_global.title.substr(4)
+    calEvent_global.title = "✖ ：" + calEvent_global.title.substr(3);
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
     eventData_JSON = calEvent2JSON(calEvent_global);
     calEvent_PUT(eventData_JSON);
@@ -220,6 +272,7 @@ function getCookie(name) {
 function csrfSafeMethod(method) {
   // these HTTP methods do not require CSRF protection
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  //return (/^(GET|PUT|DELETE|PATCH|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
 //AJAXの前にcsrftokenをセット
@@ -237,7 +290,7 @@ $.ajaxSetup({
 function calEvent_POST(eventData_JSON) {
   $.ajax({
     method: "POST",
-    url: "./api/calevent/",
+    url: "../api/calevent/",
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
@@ -254,7 +307,7 @@ function calEvent_POST(eventData_JSON) {
 function calEvent_PUT(eventData_JSON) {
   $.ajax({
     method: "PUT",
-    url: "./api/calevent/" + eventData_JSON.id + "/",
+    url: "../api/calevent/" + eventData_JSON.id + "/",
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
@@ -271,7 +324,7 @@ function calEvent_PUT(eventData_JSON) {
 function calEvent_Delete(eventData_JSON) {
   $.ajax({
     method: "DELETE",
-    url: "./api/calevent/" + eventData_JSON.id + "/",
+    url: "../api/calevent/" + eventData_JSON.id + "/",
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
@@ -286,9 +339,9 @@ function calEvent_Delete(eventData_JSON) {
 
 //Eventを取得する
 function calEvent_Get(view) {
-  var get_url="./api/calevent?x="+(moment(view.start).format("YYYY-MM-DD"));
+  var get_url = "../api/calevent?start_date=" + (moment(view.start).format("YYYY-MM-DD")) + "&end_date=" + (moment(view.end).format("YYYY-MM-DD"));
   //パラメータで日付をわたす
-
+  console.log(get_url);
   $.ajax({
     method: "GET",
     url: get_url,
@@ -298,7 +351,7 @@ function calEvent_Get(view) {
     success: function(data) {
       console.log(data)
       $('#calendar').fullCalendar('removeEvents');
-			$('#calendar').fullCalendar('addEventSource', data);
+      $('#calendar').fullCalendar('addEventSource', data);
     },
     error: function(data) {
       console.log("Ajax create Failed")
@@ -307,3 +360,5 @@ function calEvent_Get(view) {
 }
 
 //});
+
+// Google calenderから祝日を

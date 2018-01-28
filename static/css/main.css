@@ -18,11 +18,26 @@ body {
 color: #444444;
 background-color: #fff;
 border: #fff;
-
 }
+
+.fc-holiday-event{
+color: #fff !important;
+background-color: #ff0000 !important;
+border: #ff0000 !important;
+pointer-events: none; /*リンクを無効化する*/
+}
+
+
 .fc-event:hover {
-color: #444444;
+color: #000;
 }
 .fc-month-view span.fc-title{
        white-space: normal;
+ }
+
+
+ .fc-event-success{
+ color: #00DD00;
+ background-color: #fff;
+ border: #fff;
  }
