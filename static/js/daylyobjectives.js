@@ -96,6 +96,7 @@ $(function() {
                 title: '重要：' + input1,
                 start: start,
                 end: end,
+                className: "",
               };
               calEvent_POST(eventData_JSON);
               //calEvent_Get(view);
@@ -106,6 +107,7 @@ $(function() {
                 title: '理想：' + input2,
                 start: start,
                 end: end,
+                className: "",
                 //id: event_id_global,
                 //username: username,
               };
@@ -151,8 +153,9 @@ $(function() {
               data: "",
               contentType: "application/json",
               success: function(data) {
+                console.log(data);
                 var events = [];
-                //$('#calendar').fullCalendar('removeEvents');
+                $('#calendar').fullCalendar('removeEvents');
                 $('#calendar').fullCalendar('addEventSource', data);
                 callback(events);
               },
@@ -210,6 +213,7 @@ $(function() {
 
   $("#editModal-3").click(function() {
     calEvent_global.title = "◯ ：" + calEvent_global.title.substr(3);
+    calEvent_global.className[0] = "fc-event-success";
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
     eventData_JSON = calEvent2JSON(calEvent_global);
     calEvent_PUT(eventData_JSON);
@@ -244,7 +248,9 @@ function calEvent2JSON(calEvent) {
     start: calEvent.start,
     end: calEvent.end,
     id: calEvent.id,
+    className: calEvent.className[0],
   };
+  console.log(eventData_JSON);
 
   return eventData_JSON;
 }

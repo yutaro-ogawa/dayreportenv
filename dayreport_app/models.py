@@ -10,6 +10,7 @@ class CalEvent(models.Model):
     start = models.DateField()
     end = models.DateField()
     created_date = models.DateField(auto_now_add=True)
+    className = models.CharField(max_length=512, blank=True, null=True)
     username = models.ForeignKey(
         User, blank=True, null=True, related_name="writername")
 
