@@ -11,10 +11,10 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
 class DayreportView(LoginRequiredMixin, View):
     '''目標一覧画面'''
-    login_url=reverse_lazy("login")
-
+    login_url = reverse_lazy("login")
     def get(self, request):
         return render(request, 'dayreport_app/dayreport.html')
 
@@ -40,17 +40,17 @@ class CalEventViewSet(viewsets.ModelViewSet):
             end_date = self.request.GET.get("end_date")
 
             tdatetime = datetime.datetime.strptime(start_date, '%Y-%m-%d')
-            start_date = datetime.date(tdatetime.year, tdatetime.month, tdatetime.day)
+            start_date = datetime.date(
+                tdatetime.year, tdatetime.month, tdatetime.day)
 
             tdatetime = datetime.datetime.strptime(end_date, '%Y-%m-%d')
-            end_date = datetime.date(tdatetime.year, tdatetime.month, tdatetime.day)
+            end_date = datetime.date(
+                tdatetime.year, tdatetime.month, tdatetime.day)
 
             print(start_date)
             print(end_date)
             # 日付のフィルター
             queryset = queryset.filter(start__range=[start_date, end_date])
-
-
 
         return queryset
 

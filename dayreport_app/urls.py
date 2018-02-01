@@ -11,5 +11,5 @@ router.register(r'calevent',CalEventViewSet)
 app_name = 'dayreport_app'
 
 urlpatterns = [
-    url(r'^dayreport/', DayreportView.as_view(), name="dayreport"),
+    url(r'^dayreport/', DayreportView.as_view(), name="dayreport"), # 画面
 ]

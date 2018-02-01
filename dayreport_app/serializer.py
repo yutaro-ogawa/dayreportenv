@@ -6,4 +6,4 @@ username = serializers
 class CalEventModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CalEvent
-        fields = ("id", "title", "start", "end", "username","className")
+        fields = ("id", "title", "start", "end", "username","className") # //色用の変更180131
