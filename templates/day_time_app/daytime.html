@@ -1,13 +1,8 @@
-{% extends "site_manage_app/base.html"%}
-{% load static %}
-
-{% block script %}
+{% extends "site_manage_app/base.html"%} {% load static %} {% block script %}
 <script src="{% static 'js/daytime.js' %}"></script>
 <link rel="stylesheet" href="{% static 'fullcalendar380/css/fullcalendar.min.css' %}"></link>
 <link rel="stylesheet" href="{% static '/css/main_daytime.css' %}"></link>
-{% endblock script%}
-
-{% block body_block%}
+{% endblock script%} {% block body_block%}
 
 <h1>1日の行動管理</h1>
 <br/>
@@ -27,39 +22,65 @@
         <h4 class="modal-title">スケジュール設定</h4>
       </div>
       <div class="modal-body">
-        <form class=”form-inline”>
-          <div class="form-group">
-               <div class="form-inline">
-            開始
-            <input type="time" class="form-control" id="inputModal-start" placeholder="開始予定時刻">
-          <div class="form-group">
-            　終了
-            <input type="time" class="form-control" id="inputModal-end" placeholder="終了予定時刻">
-
-            　場所＠
-            <input type="text" class="form-control" id="inputModal-place" placeholder="＠">
-</div>
-
-</div>
-<br>
+        <form>
           <div class="form-group">
             タイトル
-            <input type="text" class="form-control" id="inputModal-title" placeholder="スケジュールタイトル">
+            <input type="text" class="form-control" id="inputModal-title" placeholder="スケジュールのタイトル　※自動で@場所名が付加されます"
 
+          </div>
+          <br>
+          <div class="form-group">
+
+            <div class="form-inline">
+              開始
+              <input type="time" class="form-control" id="inputModal-start" placeholder="開始予定時刻">
+              <div class="form-group">
+              　終了
+                <input type="time" class="form-control" id="inputModal-end" placeholder="終了予定時刻"> 　場所＠
+                <input type="text" class="form-control" id="inputModal-place" placeholder="＠">
+              </div>
+
+            </div>
+
+          </div>
+          <br>
+          <div class="form-group">
+            <div class="form-inline">
+              プロジェクト
+              <select name="example" class="form-control" id="inputModal-pnum">
+  <option value="サンプル1">サンプル1</option>
+  <option value="サンプル2">サンプル2</option>
+  <option value="サンプル3">新規追加</option>
+  </select>
+  　コード
+              <select name="example" class="form-control" id="inputModal-codenum">
+  <option value="サンプル1">サンプル1</option>
+  <option value="サンプル2">サンプル2</option>
+  <option value="サンプル3">新規追加</option>
+  </select>
 </div>
 </div>
-<br>
-<div class="form-group">
-            プロジェクトナンバー
-            <input type="text" class="form-control" id="inputModal-pnumber1" placeholder="P12345">
-<br>
-            プロジェクトナンバー2
-            <input type="text" class="form-control" id="inputModal-pnmber2" placeholder="XX">
-<br>
-
-
-            <label for="exampleInput7">詳細</label>
-            <textarea class="form-control" id="inputModal-detail" placeholder="詳細" rows="3"></textarea>
+          <br>
+          <div class="form-group">
+            <div class="form-inline">
+  　タスク種別
+              <select name="example" class="form-control" id="inputModal-tasktype">
+  <option value="サンプル1">サンプル1</option>
+  <option value="サンプル2">サンプル2</option>
+  <option value="サンプル3">新規追加</option>
+  </select>
+　ラベル
+              <select name="example" class="form-control" id="inputModal-tasklabel">
+  <option value="サンプル1">サンプル1</option>
+  <option value="サンプル2">サンプル2</option>
+  <option value="サンプル3">新規追加</option>
+  </select>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            詳細
+            <textarea class="form-control" id="inputModal-detail" placeholder="スケジュールの詳細を記入して下さい" rows="4"></textarea>
           </div>
         </form>
       </div>

@@ -63,6 +63,8 @@ $(function() {
           document.getElementById("inputModal-start").value = moment(start).format("hh:mm");
           document.getElementById("inputModal-end").value = moment(end).format("hh:mm");
           document.getElementById("inputModal-place").value = "14F";
+          document.getElementById("inputModal-detail").value = "";
+
           console.log(start)
         });
 
