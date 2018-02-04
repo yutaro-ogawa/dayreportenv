@@ -11,12 +11,6 @@ body {
   padding: 2%;
 }
 
-#calendar_day2 {
-  margin: 0 auto;
-  padding: 2%;
-}
-
-
 .fc-sun {
   color: #FF0000;
 }
@@ -24,10 +18,9 @@ body {
 .fc-sat {
   color: #0000FF;
 }
+
 .fc-event{
-color: #444444;
-background-color: #fff;
-border: #fff;
+
 }
 
 .fc-holiday-event{

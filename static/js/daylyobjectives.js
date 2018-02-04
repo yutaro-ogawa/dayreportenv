@@ -10,10 +10,10 @@ $(function() {
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
       //ヘッダーの設定
       header: {
-        left: 'today',
+        left: '',
         //        left: 'today month,agendaWeek,agendaDay',
         center: 'title',
-        right: 'prev next'
+        right: 'prev today next'
       },
       firstDay: 1,
       views: {
