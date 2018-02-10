@@ -9,9 +9,9 @@
 <br/> {% if user.is_authenticated %} {% else %}
 <a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
 
-<div class="flex">
-  <div id="calendar_day1"></div>
-</div>
+
+<div id="calendar_day1"></div>
+
 
 <!-- モーダル・ダイアログ -->
 <div class="modal fade" id="inputModal" tabindex="-1">
@@ -28,21 +28,27 @@
             <input type="text" class="form-control" id="inputModal-title" placeholder="スケジュールのタイトル　※自動で@場所名が付加されます"
 
           </div>
-          <br>
+          <br><br>
           <div class="form-group">
 
             <div class="form-inline">
-              開始
+              　開始
               <input type="time" class="form-control" id="inputModal-start" placeholder="開始予定時刻">
               <div class="form-group">
               　終了
-                <input type="time" class="form-control" id="inputModal-end" placeholder="終了予定時刻"> 　場所＠
-                <input type="text" class="form-control" id="inputModal-place" placeholder="＠">
+                <input type="time" class="form-control" id="inputModal-end" placeholder="終了予定時刻"> 　
               </div>
 
             </div>
 
           </div>
+
+          <div class="form-group">
+              <div class="form-inline">
+          場所＠
+            <input type="text" class="form-control" id="inputModal-place" placeholder="＠">
+</div>
+</div>
           <br>
           <div class="form-group">
             <div class="form-inline">
@@ -52,29 +58,30 @@
   <option value="サンプル2">サンプル2</option>
   <option value="サンプル3">新規追加</option>
   </select>
-  　コード
+  <button type="button" id="newproject" class="btn btn-default" data-dismiss="modal">新規</button>
+</div>
+</div>
+<div class="form-group">
+  <div class="form-inline">
+　タスク種別
               <select name="example" class="form-control" id="inputModal-codenum">
   <option value="サンプル1">サンプル1</option>
   <option value="サンプル2">サンプル2</option>
   <option value="サンプル3">新規追加</option>
   </select>
+  <button type="button" id="newcode" class="btn btn-default" data-dismiss="modal">新規</button>
 </div>
 </div>
-          <br>
           <div class="form-group">
             <div class="form-inline">
-  　タスク種別
-              <select name="example" class="form-control" id="inputModal-tasktype">
-  <option value="サンプル1">サンプル1</option>
-  <option value="サンプル2">サンプル2</option>
-  <option value="サンプル3">新規追加</option>
-  </select>
-　ラベル
+
+　　　ラベル
               <select name="example" class="form-control" id="inputModal-tasklabel">
   <option value="サンプル1">サンプル1</option>
   <option value="サンプル2">サンプル2</option>
   <option value="サンプル3">新規追加</option>
   </select>
+  <button type="button" id="newlabel" class="btn btn-default" data-dismiss="modal">新規</button>
             </div>
           </div>
           <br>

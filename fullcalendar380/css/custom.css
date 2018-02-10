@@ -1,0 +1,28 @@
+body {
+  font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+  font-size: 14px;
+}
+
+#calendar {
+  margin: 0 auto;
+}
+
+.fc-sun {
+  color: #FF0000;
+}
+
+.fc-sat {
+  color: #0000FF;
+}
+.fc-event{
+color: #444444;
+background-color: #fff;
+border: #fff;
+
+}
+.fc-event:hover {
+color: #444444;
+}
+.fc-month-view span.fc-title{
+       white-space: normal;
+ }
