@@ -6,4 +6,4 @@ username = serializers
 class CodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Code
-        fields = ("title", "code_id", "code_color", "created_date","username")
+        fields = ("id","title", "code_id", "code_color","delete_flg", "created_date","username")
