@@ -20,8 +20,10 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from site_manage_app.views import Register
 
-# api
+# 追加 Web-API
 from dayreport_app.urls import router as calevent_router
+from code_app.urls import router as code_router
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -35,4 +37,5 @@ urlpatterns = [
     url(r'^', include('project_app.urls')),  # 追加  \
     url(r'^', include('code_app.urls')),  # 追加
     url(r'^api/', include(calevent_router.urls)), # 追加 Web-API
+    url(r'^api/', include(code_router.urls)), # 追加 Web-API
 ]
