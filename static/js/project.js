@@ -2,7 +2,7 @@
 // 最初にpcodeリストを読み取る
 //---------------------------------------------------------
 $(document).ready(function() {
-  code_Get();
+  project_Get();
 });
 
 
@@ -10,19 +10,19 @@ $(document).ready(function() {
 // 各ボタンの関数
 //---------------------------------------------------------
 
-function codesave() {
+function projectsave() {
   //　モーダル内の登録ボタン
-  var code_title = $("#modalInput1").val();
-  var code_id = $("#modalInput2").val();
-  var code_color = $("#modalInput3").val();
+  var project_title = $("#modalInput1").val();
+  var project_id = $("#modalInput2").val();
+  var project_color = $("#modalInput3").val();
 
-  if (code_title) {
-    code_JSON = {
-      title: code_title,
-      code_id: code_id,
-      code_color: code_color,
+  if (project_title) {
+    project_JSON = {
+      title: project_title,
+      project_id: project_id,
+      project_color: project_color,
     };
-    code_POST(code_JSON);
+    project_POST(project_JSON);
 
     // POSTとGETの順番が入れ替わるのを防ぐスリープ
     const d1 = new Date();
@@ -33,7 +33,7 @@ function codesave() {
       }
     }
 
-    code_Get();
+    project_Get();
 
     //モーダルのリセットをしておく
     $("#modalInput1").val('');
@@ -44,35 +44,35 @@ function codesave() {
 
 // 登録済みのタスクの編集
 var id_global = undefined; // モーダル操作用のグローバル変数
-function codeputmodal(id) {
+function projectputmodal(id) {
   //　編集ボタン
-  var code_title = $('#title_' + id + '').text();
-  var code_id = $('#code_id_' + id + '').text();
-  var code_color = $('#code_color_' + id + '').text();
+  var project_title = $('#title_' + id + '').text();
+  var project_id = $('#project_id_' + id + '').text();
+  var project_color = $('#project_color_' + id + '').text();
 
   $('#editModal').on('show.bs.modal', function() {
-    document.getElementById("editmodalInput1").value = code_title;
-    document.getElementById("editmodalInput2").value = code_id;
-    document.getElementById("editmodalInput3").value = code_color;
+    document.getElementById("editmodalInput1").value = project_title;
+    document.getElementById("editmodalInput2").value = project_id;
+    document.getElementById("editmodalInput3").value = project_color;
   });
   id_global = id;
   $('#editModal').modal('show');
 }
 
-function codeput() {
+function projectput() {
   //　モーダル内の更新ボタン
-  var code_title = $("#editmodalInput1").val();
-  var code_id = $("#editmodalInput2").val();
-  var code_color = $("#editmodalInput3").val();
+  var project_title = $("#editmodalInput1").val();
+  var project_id = $("#editmodalInput2").val();
+  var project_color = $("#editmodalInput3").val();
 
-  if (code_title) {
-    code_JSON = {
-      title: code_title,
-      code_id: code_id,
-      code_color: code_color,
+  if (project_title) {
+    project_JSON = {
+      title: project_title,
+      project_id: project_id,
+      project_color: project_color,
       id: id_global,
     };
-    code_PUT(code_JSON);
+    project_PUT(project_JSON);
 
     // PUTとGETの順番が入れ替わるのを防ぐスリープ
     const d1 = new Date();
@@ -83,26 +83,26 @@ function codeput() {
       }
     }
 
-    code_Get();
+    project_Get();
 
   }
 }
 
-function codedelete() {
+function projectdelete() {
   //　モーダル内の削除ボタンで論理削除
-  if (confirm('本当にこのタスクを削除してよろしいですか？')) {
-    var code_title = $("#editmodalInput1").val();
-    var code_id = $("#editmodalInput2").val();
-    var code_color = $("#editmodalInput3").val();
-    if (code_title) {
-      code_JSON = {
-        title: code_title,
-        code_id: code_id,
-        code_color: code_color,
+  if (confirm('本当にこのプロジェクトを削除してよろしいですか？')) {
+    var project_title = $("#editmodalInput1").val();
+    var project_id = $("#editmodalInput2").val();
+    var project_color = $("#editmodalInput3").val();
+    if (project_title) {
+      project_JSON = {
+        title: project_title,
+        project_id: project_id,
+        project_color: project_color,
         id: id_global,
         delete_flg: true,
       };
-      code_PUT(code_JSON);
+      project_PUT(project_JSON);
 
       // PUTとGETの順番が入れ替わるのを防ぐスリープ
       const d1 = new Date();
@@ -113,7 +113,7 @@ function codedelete() {
         }
       }
 
-      code_Get();
+      project_Get();
 
     }
   } else {}
@@ -163,12 +163,12 @@ $.ajaxSetup({
 //---------------------------------------------------------
 
 //POST
-function code_POST(code_JSON) {
+function project_POST(project_JSON) {
   $.ajax({
     method: "POST",
-    url: "../api/code/",
+    url: "../api/project/",
     dataType: "json",
-    data: JSON.stringify(code_JSON),
+    data: JSON.stringify(project_JSON),
     contentType: "application/json",
     success: function(data) {
       console.log(data);
@@ -180,12 +180,12 @@ function code_POST(code_JSON) {
 }
 
 //PUT
-function code_PUT(code_JSON) {
+function project_PUT(project_JSON) {
   $.ajax({
     method: "PUT",
-    url: "../api/code/" + code_JSON.id + "/",
+    url: "../api/project/" + project_JSON.id + "/",
     dataType: "json",
-    data: JSON.stringify(code_JSON),
+    data: JSON.stringify(project_JSON),
     contentType: "application/json",
     success: function(data) {
       console.log(data)
@@ -197,11 +197,11 @@ function code_PUT(code_JSON) {
 }
 
 //Eventを取得する 表も自動で描画する
-function code_Get() {
+function project_Get() {
   //HTMLを初期化
   $("table.code_tbl tbody").html("");
 
-  var get_url = "../api/code";
+  var get_url = "../api/project";
   //パラメータで日付をわたす
   console.log(get_url);
   $.ajax({
@@ -216,10 +216,10 @@ function code_Get() {
       $(data).each(function() {
         $('<tr>' +
           '<td class="text-center" id="title_' + this.id + '">' + this.title + '</td>' +
-          '<td class="text-center" id="code_id_' + this.id + '">' + this.code_id + '</td>' +
-          '<td class="text-center" id="code_color_' + this.id + '"style="background-color:' + this.code_color + '">' + this.code_color + '</td>' +
+          '<td class="text-center" id="project_id_' + this.id + '">' + this.project_id + '</td>' +
+          '<td class="text-center" id="project_color_' + this.id + '"style="background-color:' + this.project_color + '">' + this.project_color + '</td>' +
           '<td>' +
-          '<button class="center-block" type="button" id="' + this.id + '" class="btn btn-default" onclick="codeputmodal(' + this.id + ')">編集・消去</button>' +
+          '<button class="center-block" type="button" id="' + this.id + '" class="btn btn-default" onclick="projectputmodal(' + this.id + ')">編集・消去</button>' +
           '</td>' +
           '</tr>').appendTo('table.code_tbl tbody');
         $('#code_table').css({

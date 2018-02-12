@@ -1,15 +1,97 @@
 {% extends "site_manage_app/base.html"%} {% load static %} {% block script %}
-<script src="{% static 'js/daytime.js' %}"></script>
+<script src="{% static 'js/project.js' %}"></script>
 <link rel="stylesheet" href="{% static 'fullcalendar380/css/fullcalendar.min.css' %}"></link>
 <link rel="stylesheet" href="{% static '/css/main_daytime.css' %}"></link>
 {% endblock script%} {% block body_block%}
 
 <h1>登録プロジェクトの管理</h1>
 <br/>
-<br/> {% if user.is_authenticated %} {% else %}
+<br/>
+{% if user.is_authenticated %}
+<button type="button" id="btn-register-code" class="btn btn-primary" data-toggle="modal" data-target="#project-register-Modal">新規プロジェクトの登録</button>
+<br/>
+<br/>
+<br/>
+<table class="table table-bordered code_tbl " id="code_table">
+  <thead>
+    <tr>
+      <th class="text-center">プロジェクトの名前</th>
+      <th class="text-center">プロジェクトコード</th>
+      <th class="text-center">色</th>
+      <th class="text-center">編集・消去</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+{% else %}
 <a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
 
+<!-- モーダル・ダイアログ -->
+<div class="modal fade" id="project-register-Modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+        <h4 class="modal-title">新たなプロジェクトの登録</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInput1">プロジェクト名</label>
+            <input type="text" class="form-control" id="modalInput1" placeholder="プロジェクト名">
+          </div>
+          <div class="form-group">
+            <label for="exampleInput2">プロジェクトコード</label>
+            <input type="text" class="form-control" id="modalInput2" placeholder="プロジェクトコード　例P4">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInput3">プロジェクトの色</label>
+            <input type="color" class="" id="modalInput3" value="#00ff00">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="project-save" class="btn btn-primary" data-dismiss="modal" onclick="projectsave()">登録</button>
+        <button type="button" id="project-cancel" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-
+<!-- 編集モーダル・ダイアログ -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+        <h4 class="modal-title">プロジェクトの編集</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="editInput1">プロジェクト名</label>
+            <input type="text" class="form-control" id="editmodalInput1">
+          </div>
+          <div class="form-group">
+            <label for="editInput2">プロジェクトコード</label>
+            <input type="text" class="form-control" id="editmodalInput2">
+          </div>
+          <div class="form-group">
+            <label for="editInput3">プロジェクトの色</label>
+            <input type="color" class="" id="editmodalInput3" value="#00ff00">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="project-put" class="btn btn-primary" data-dismiss="modal" onclick="projectput()">プロジェクトを更新</button>
+        <button type="button" id="project-delete" class="btn btn-danger" data-dismiss="modal" onclick="projectdelete()">このプロジェクトを削除</button>
+        <button type="button" id="project-cancel" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

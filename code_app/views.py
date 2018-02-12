@@ -14,7 +14,7 @@ from .models import Code
 
 # Create your views here.
 class CodeView(LoginRequiredMixin, View):
-    '''プロジェクトコードの管理画面'''
+    '''タスクコードコードの管理画面'''
     login_url=reverse_lazy("login")
 
     def get(self, request):
