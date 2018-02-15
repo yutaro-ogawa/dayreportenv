@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Project
 
-username = serializers
+#username = serializers
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:

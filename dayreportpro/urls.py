@@ -24,6 +24,7 @@ from site_manage_app.views import Register
 from dayreport_app.urls import router as calevent_router
 from code_app.urls import router as code_router
 from project_app.urls import router as project_router
+from label_app.urls import router as label_router
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -36,7 +37,9 @@ urlpatterns = [
     url(r'^', include('day_time_app.urls')),  # 追加
     url(r'^', include('project_app.urls')),  # 追加  \
     url(r'^', include('code_app.urls')),  # 追加
+    url(r'^', include('label_app.urls')),  # 追加
     url(r'^api/', include(calevent_router.urls)), # 追加 Web-API
     url(r'^api/', include(code_router.urls)), # 追加 Web-API
     url(r'^api/', include(project_router.urls)), # 追加 Web-API
+    url(r'^api/', include(label_router.urls)), # 追加 Web-API
 ]
