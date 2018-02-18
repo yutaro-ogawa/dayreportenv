@@ -1,4 +1,17 @@
 //---------------------------------------------------------
+// 最初にリストを読み取る
+//---------------------------------------------------------
+$(document).ready(function() {
+  project_Get_selecter();
+  task_Get_selecter();
+  label_Get_selecter();
+});
+
+
+
+
+
+//---------------------------------------------------------
 // fullCalendar関連の設定
 //---------------------------------------------------------
 $(function() {
@@ -6,7 +19,8 @@ $(function() {
   var exists_event_global = false; // イベントのグローバル変数
 
 
-  $('#calendar_day1').fullCalendar({
+
+  $('#calendar').fullCalendar({
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
       height: 650,
       //ヘッダーの設定
@@ -64,52 +78,57 @@ $(function() {
           document.getElementById("inputModal-end").value = moment(end).format("hh:mm");
           document.getElementById("inputModal-place").value = "14F";
           document.getElementById("inputModal-detail").value = "";
-
-          console.log(start)
         });
 
 
-          $('#inputModal').modal();
-          $("#inputModal-cancel").click(function() {
-            // モーダル内のキャンセルボタン
-            $('.modal').find('input').val('');
-            $('#inputModal-save').unbind();
-            $('#calendar').fullCalendar('unselect');
-          });
+        $('#inputModal').modal();
+        $("#inputModal-cancel").click(function() {
+          // モーダル内のキャンセルボタン
+          $('.modal').find('input').val('');
+          $('#inputModal-save').unbind();
+          $('#calendar').fullCalendar('unselect');
+        });
 
-          $("#inputModal-save").click(function() {
-            //　モーダル内の登録ボタン
-            var input1 = $("#modalInput1").val();
-            var input2 = $("#modalInput2").val();
-            var username = $("#username").val();
-            if (input1) {
-              eventData_JSON = {
-                title: '重要：' + input1,
-                start: start,
-                end: end,
-                className: "", //色用の変更180131
-              };
-              calEvent_POST(eventData_JSON);
-              //calEvent_Get(view);
-              $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
-            }
-            if (input2) {
-              eventData_JSON = {
-                title: '理想：' + input2,
-                start: start,
-                end: end,
-                className: "", //色用の変更180131
-                //id: event_id_global,
-                //username: username,
-              };
-              calEvent_POST(eventData_JSON);
-              //calEvent_Get(view);
-              $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
-            }
-            $('.modal').find('input').val('');
-            $('#inputModal-save').unbind();
-            $('#calendar').fullCalendar('unselect');
-          });
+        $("#inputModal-save").click(function() {
+
+          //　モーダル内の登録ボタン
+          var title = $("#inputModal-title").val();
+          var start_time = $("#inputModal-start").val();
+          var start_day = moment(start).format("YYYY-MM-DD");
+          var end_time = $("#inputModal-end").val();
+          var end_day = moment(end).format("YYYY-MM-DD");
+          var place = $("#inputModal-place").val();
+          var project_id = $("#inputModal-project").val();
+          var task_id = $("#inputModal-task").val();
+          var label_id = $("#inputModal-label").val();
+
+          project_Get_color(project_id); // htmlhiddenの要素を非同期で書き換え
+          var project_color = $("#project_color").val();
+
+          console.log(project_color);
+
+          if (title) {
+            eventData_JSON = {
+              title: title + '@' + place,
+              place: place,
+              start: start_day + 'T' + start_time,
+              end: end_day + 'T' + end_time,
+              className: "", //色用の変更180131
+              project: project_id,
+              task: task_id,
+              label: label_id,
+              color: project_color,
+            };
+            console.log(eventData_JSON);
+            //calEvent_POST(eventData_JSON);
+            //calEvent_Get(view);
+            $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+          }
+
+          $('.modal').find('input').val('');
+          $('#inputModal-save').unbind();
+          $('#calendar').fullCalendar('unselect');
+        });
       },
 
       eventClick: function(calEvent, jsEvent, view) {
@@ -359,4 +378,134 @@ function calEvent_Get(view) {
 
 //});
 
-// Google calenderから祝日を
+//-------------------------------------------------------------------------
+// 動的にselect要素を生成
+//-------------------------------------------------------------------------
+//プロジェクトをJsonから取得
+function project_Get_selecter() {
+  var get_url = "../api/project";
+  //パラメータで日付をわたす
+  console.log(get_url);
+  $.ajax({
+    method: "GET",
+    url: get_url,
+    dataType: "json",
+    data: "",
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data)
+      //HTMLを生成
+      $(data).each(function() {
+        //連想配列をループ処理で値を取り出してセレクトボックスにセットする
+        let op = document.createElement("option");
+        op.value = this.id; //value値
+        op.text = this.title; //テキスト値
+        document.getElementById("inputModal-project").appendChild(op);
+      })
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+//タスクをJsonから取得
+function task_Get_selecter() {
+  var get_url = "../api/code";
+  //パラメータで日付をわたす
+  console.log(get_url);
+  $.ajax({
+    method: "GET",
+    url: get_url,
+    dataType: "json",
+    data: "",
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data)
+      //HTMLを生成
+      $(data).each(function() {
+        //連想配列をループ処理で値を取り出してセレクトボックスにセットする
+        let op = document.createElement("option");
+        op.value = this.id; //value値
+        op.text = this.title; //テキスト値
+        document.getElementById("inputModal-task").appendChild(op);
+      })
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+//ラベルをJsonから取得
+function label_Get_selecter() {
+  var get_url = "../api/label";
+  //パラメータで日付をわたす
+  console.log(get_url);
+  $.ajax({
+    method: "GET",
+    url: get_url,
+    dataType: "json",
+    data: "",
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data)
+      //HTMLを生成
+      $(data).each(function() {
+        //連想配列をループ処理で値を取り出してセレクトボックスにセットする
+        let op = document.createElement("option");
+        op.value = this.id; //value値
+        op.text = this.title; //テキスト値
+        document.getElementById("inputModal-label").appendChild(op);
+      })
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+//-------------------------------------------------------------------------
+// プロジェクトカラーをゲット
+//-------------------------------------------------------------------------
+//プロジェクトをJsonから取得
+//非同期通信にしている
+function project_Get_color(project_id) {
+  var get_url = "../api/project/" + project_id + "/";
+  console.log(get_url);
+
+  var project =$.ajax({
+    method: "GET",
+    url: get_url,
+    dataType: "json",
+    data: "",
+    contentType: "application/json",
+    async: false,
+
+    success: function(data) {
+      $(data).each(function() {
+        document.getElementById("project_color").value = this.project_color;
+
+    });
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  });
+  console.log(project)
+  return project;
+}
+
+//-------------------------------------------------------------------------
+// プロジェクトカラーをゲット
+//-------------------------------------------------------------------------
+// PUTとGETの順番が入れ替わるのを防ぐスリープ
+function sleep(ms) {
+const d1 = new Date();
+while (true) {
+  const d2 = new Date();
+  if (d2 - d1 > ms) {
+    break;
+  }
+}
+}

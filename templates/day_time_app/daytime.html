@@ -10,8 +10,8 @@
 <a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
 
 
-<div id="calendar_day1"></div>
-
+<div id="calendar"></div>
+<input type="hidden" name="project_color" value="#ff0000" id="project_color">
 
 <!-- モーダル・ダイアログ -->
 <div class="modal fade" id="inputModal" tabindex="-1">
@@ -53,22 +53,14 @@
           <div class="form-group">
             <div class="form-inline">
               プロジェクト
-              <select name="example" class="form-control" id="inputModal-pnum">
-  <option value="サンプル1">サンプル1</option>
-  <option value="サンプル2">サンプル2</option>
-  <option value="サンプル3">新規追加</option>
-  </select>
+              <select name="example" class="form-control" id="inputModal-project"></select>
   <button type="button" id="newproject" class="btn btn-default" data-dismiss="modal">新規</button>
 </div>
 </div>
 <div class="form-group">
   <div class="form-inline">
 タスクコード
-              <select name="example" class="form-control" id="inputModal-codenum">
-  <option value="サンプル1">サンプル1</option>
-  <option value="サンプル2">サンプル2</option>
-  <option value="サンプル3">新規追加</option>
-  </select>
+              <select name="example" class="form-control" id="inputModal-task"></select>
   <button type="button" id="newcode" class="btn btn-default" data-dismiss="modal">新規</button>
 </div>
 </div>
@@ -76,11 +68,7 @@
             <div class="form-inline">
 
 　　　ラベル
-              <select name="example" class="form-control" id="inputModal-tasklabel">
-  <option value="サンプル1">サンプル1</option>
-  <option value="サンプル2">サンプル2</option>
-  <option value="サンプル3">新規追加</option>
-  </select>
+              <select name="example" class="form-control" id="inputModal-label"></select>
   <button type="button" id="newlabel" class="btn btn-default" data-dismiss="modal">新規</button>
             </div>
           </div>

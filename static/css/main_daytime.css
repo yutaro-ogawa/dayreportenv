@@ -20,14 +20,11 @@ body {
 }
 
 .fc-event{
-
+  color: #222222 !important;
 }
 
 .fc-holiday-event{
-color: #fff !important;
-background-color: #ff0000 !important;
-border: #ff0000 !important;
-pointer-events: none; /*リンクを無効化する*/
+
 }
 
 
