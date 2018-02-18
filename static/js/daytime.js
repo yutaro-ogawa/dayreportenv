@@ -27,7 +27,7 @@ $(function() {
       header: {
         left: '',
         center: 'title',
-        right: 'prev  agendaWeek today next'
+        right: 'prev  agendaWeek month today next'
       },
       defaultView: 'agendaWeek',
       firstDay: 1,
@@ -72,12 +72,16 @@ $(function() {
       select: function(start, end, jsEvent, view) {
         //日の枠内を選択したときの処理
 
-        //イベントをクリックしたときの処理
+        //イベントをクリックしたときの処理　初期表示
         $('#inputModal').on('show.bs.modal', function() {
           document.getElementById("inputModal-start").value = moment(start).format("hh:mm");
           document.getElementById("inputModal-end").value = moment(end).format("hh:mm");
           document.getElementById("inputModal-place").value = "14F";
           document.getElementById("inputModal-detail").value = "";
+          document.getElementById("inputModal-project").value = "1";
+          document.getElementById("inputModal-task").value = "2";
+          document.getElementById("inputModal-label").value = "2";
+          document.getElementById("inputModal-radio0").checked=true;
         });
 
 
@@ -96,27 +100,44 @@ $(function() {
           var start_time = $("#inputModal-start").val();
           var start_day = moment(start).format("YYYY-MM-DD");
           var end_time = $("#inputModal-end").val();
-          var end_day = moment(end).format("YYYY-MM-DD");
+          //var end_day = moment(end).format("YYYY-MM-DD");
           var place = $("#inputModal-place").val();
           var project_id = $("#inputModal-project").val();
           var task_id = $("#inputModal-task").val();
           var label_id = $("#inputModal-label").val();
+          //振り返りのradioボタン
+          var hurikaeri0 = document.getElementById("inputModal-radio0").checked;
+          var hurikaeri1 = document.getElementById("inputModal-radio1").checked;
+          var hurikaeri2 =document.getElementById("inputModal-radio2").checked;
+          var hurikaeri3 = document.getElementById("inputModal-radio3").checked;
+          var hurikaeri4 = document.getElementById("inputModal-radio4").checked;
+          var hurikaeri =1;
+          if (hurikaeri1 == true) {
+            hurikaeri = "1";
+          } else if (hurikaeri2 == true) {
+            hurikaeri = "2";
+          }  else if (hurikaeri3 == true) {
+            hurikaeri = "3";
+          }  else if (hurikaeri4 == true) {
+            hurikaeri = "4";
+          } else {
+            hurikaeri = "0";
+          }
 
           project_Get_color(project_id); // htmlhiddenの要素を非同期で書き換え
           var project_color = $("#project_color").val();
-
-          console.log(project_color);
 
           if (title) {
             eventData_JSON = {
               title: title + '@' + place,
               place: place,
               start: start_day + 'T' + start_time,
-              end: end_day + 'T' + end_time,
+              end: start_day + 'T' + end_time,
               className: "", //色用の変更180131
               project: project_id,
               task: task_id,
               label: label_id,
+              hurikaeri: hurikaeri,
               color: project_color,
             };
             console.log(eventData_JSON);
@@ -383,6 +404,7 @@ function calEvent_Get(view) {
 //-------------------------------------------------------------------------
 //プロジェクトをJsonから取得
 function project_Get_selecter() {
+  $("#inputModal-project").children().remove();
   var get_url = "../api/project";
   //パラメータで日付をわたす
   console.log(get_url);
@@ -412,7 +434,8 @@ function project_Get_selecter() {
 //タスクをJsonから取得
 function task_Get_selecter() {
   var get_url = "../api/code";
-  //パラメータで日付をわたす
+  $("#inputModal-task").children().remove();
+
   console.log(get_url);
   $.ajax({
     method: "GET",
@@ -440,7 +463,8 @@ function task_Get_selecter() {
 //ラベルをJsonから取得
 function label_Get_selecter() {
   var get_url = "../api/label";
-  //パラメータで日付をわたす
+  $("#inputModal-label").children().remove();
+
   console.log(get_url);
   $.ajax({
     method: "GET",
@@ -474,7 +498,7 @@ function project_Get_color(project_id) {
   var get_url = "../api/project/" + project_id + "/";
   console.log(get_url);
 
-  var project =$.ajax({
+  var project = $.ajax({
     method: "GET",
     url: get_url,
     dataType: "json",
@@ -486,13 +510,12 @@ function project_Get_color(project_id) {
       $(data).each(function() {
         document.getElementById("project_color").value = this.project_color;
 
-    });
+      });
     },
     error: function(data) {
       console.log("Ajax create Failed")
     }
   });
-  console.log(project)
   return project;
 }
 
@@ -501,11 +524,167 @@ function project_Get_color(project_id) {
 //-------------------------------------------------------------------------
 // PUTとGETの順番が入れ替わるのを防ぐスリープ
 function sleep(ms) {
-const d1 = new Date();
-while (true) {
-  const d2 = new Date();
-  if (d2 - d1 > ms) {
-    break;
+  const d1 = new Date();
+  while (true) {
+    const d2 = new Date();
+    if (d2 - d1 > ms) {
+      break;
+    }
   }
 }
+
+//-------------------------------------
+//新規の作成系 プロジェクト
+//-------------------------------------
+function projectcancel() {
+  //モーダルのリセットをしておく
+  $("#pmodalInput1").val('');
+  $("#pmodalInput2").val('');
+  $("#pmodalInput3").val('#00ff00');
+  $('#project-register-Modal').modal('hide');
+}
+
+function projectsave() {
+  //　モーダル内の登録ボタン
+  var project_title = $("#pmodalInput1").val();
+  var project_id = $("#pmodalInput2").val();
+  var project_color = $("#pmodalInput3").val();
+
+  if (project_title) {
+    project_JSON = {
+      title: project_title,
+      project_id: project_id,
+      project_color: project_color,
+    };
+    project_POST(project_JSON);
+    project_Get_selecter();
+
+    //モーダルのリセットをしておく
+    $("#pmodalInput1").val('');
+    $("#pmodalInput2").val('');
+    $("#pmodalInput3").val('#00ff00');
+    $('#project-register-Modal').modal('hide');
+  }
+}
+
+//POST
+function project_POST(project_JSON) {
+  $.ajax({
+    method: "POST",
+    url: "../api/project/",
+    dataType: "json",
+    data: JSON.stringify(project_JSON),
+    contentType: "application/json",
+    async: false,
+    success: function(data) {
+      console.log(data);
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+//-------------------------------------
+//新規の作成系 タスク
+//-------------------------------------
+function codecancel() {
+  //モーダルのリセットをしておく
+  $("#tmodalInput1").val('');
+  $("#tmodalInput2").val('');
+  $("#tmodalInput3").val('#00ff00');
+  $('#code-register-Modal').modal('hide');
+}
+
+function codesave() {
+  //　モーダル内の登録ボタン
+  var code_title = $("#tmodalInput1").val();
+  var code_id = $("#tmodalInput2").val();
+  var code_color = $("#tmodalInput3").val();
+
+  if (code_title) {
+    code_JSON = {
+      title: code_title,
+      code_id: code_id,
+      code_color: code_color,
+    };
+    code_POST(code_JSON);
+    task_Get_selecter();
+
+    //モーダルのリセットをしておく
+    $("#tmodalInput1").val('');
+    $("#tmodalInput2").val('');
+    $("#tmodalInput3").val('#00ff00');
+    $('#code-register-Modal').modal('hide');
+  }
+}
+
+//POST
+function code_POST(code_JSON) {
+  $.ajax({
+    method: "POST",
+    url: "../api/code/",
+    dataType: "json",
+    data: JSON.stringify(code_JSON),
+    contentType: "application/json",
+        async: false,
+    success: function(data) {
+      console.log(data);
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+//-------------------------------------
+//新規の作成系 ラベル
+//-------------------------------------
+function labelcancel() {
+  //モーダルのリセットをしておく
+  $("#lmodalInput1").val('');
+  $("#lmodalInput2").val('');
+  $("#lmodalInput3").val('#00ff00');
+  $('#label-register-Modal').modal('hide');
+}
+
+function labelsave() {
+  //　モーダル内の登録ボタン
+  var label_title = $("#lmodalInput1").val();
+  var label_id = $("#lmodalInput2").val();
+  var label_color = $("#lmodalInput3").val();
+
+  if (label_title) {
+    label_JSON = {
+      title: label_title,
+      label_id: label_id,
+      label_color: label_color,
+    };
+    label_POST(label_JSON);
+    label_Get_selecter();
+
+    //モーダルのリセットをしておく
+    $("#lmodalInput1").val('');
+    $("#lmodalInput2").val('');
+    $("#lmodalInput3").val('#00ff00');
+    $('#label-register-Modal').modal('hide');
+  }
+}
+
+//POST
+function label_POST(label_JSON) {
+  $.ajax({
+    method: "POST",
+    url: "../api/label/",
+    dataType: "json",
+    data: JSON.stringify(label_JSON),
+    contentType: "application/json",
+            async: false,
+    success: function(data) {
+      console.log(data);
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
 }

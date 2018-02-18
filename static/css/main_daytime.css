@@ -6,6 +6,7 @@ body {
   display: flex;
 }
 
+
 #calendar_day1 {
   margin: 0 auto;
   padding: 2%;
@@ -24,7 +25,10 @@ body {
 }
 
 .fc-holiday-event{
-
+  color: #fff !important;
+  background-color: #ff0000 !important;
+  border: #ff0000 !important;
+  pointer-events: none; /*リンクを無効化する*/
 }
 
 

@@ -15,7 +15,7 @@
 
 <!-- モーダル・ダイアログ -->
 <div class="modal fade" id="inputModal" tabindex="-1">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
@@ -32,47 +32,45 @@
           <div class="form-group">
 
             <div class="form-inline">
-              　開始
+              開始
               <input type="time" class="form-control" id="inputModal-start" placeholder="開始予定時刻">
               <div class="form-group">
               　終了
                 <input type="time" class="form-control" id="inputModal-end" placeholder="終了予定時刻"> 　
               </div>
-
-            </div>
-
-          </div>
-
-          <div class="form-group">
-              <div class="form-inline">
-          場所＠
+              場所＠
             <input type="text" class="form-control" id="inputModal-place" placeholder="＠">
 </div>
 </div>
           <br>
           <div class="form-group">
             <div class="form-inline">
-              プロジェクト
               <select name="example" class="form-control" id="inputModal-project"></select>
-  <button type="button" id="newproject" class="btn btn-default" data-dismiss="modal">新規</button>
-</div>
-</div>
-<div class="form-group">
-  <div class="form-inline">
-タスクコード
-              <select name="example" class="form-control" id="inputModal-task"></select>
-  <button type="button" id="newcode" class="btn btn-default" data-dismiss="modal">新規</button>
-</div>
-</div>
-          <div class="form-group">
-            <div class="form-inline">
-
-　　　ラベル
-              <select name="example" class="form-control" id="inputModal-label"></select>
-  <button type="button" id="newlabel" class="btn btn-default" data-dismiss="modal">新規</button>
+  <button type="button" id="newproject" class="btn btn-default" data-toggle="modal" data-target="#project-register-Modal">新規</button>
+&emsp;              <select name="example" class="form-control" id="inputModal-task"></select>
+  <button type="button" id="newcode" class="btn btn-default" data-toggle="modal" data-target="#code-register-Modal">新規</button>
+&emsp;  <select name="example" class="form-control" id="inputModal-label"></select>
+  <button type="button" id="newlabel" class="btn btn-default" data-toggle="modal" data-target="#label-register-Modal">新規</button>
             </div>
           </div>
           <br>
+          <div class="form-group">
+            <div class="form-inline">
+              スケジュールの振りかえり　
+          <input type="radio" value="0" name="hurikaeri" class="form-control" id="inputModal-radio0" checked>未選択
+          <br>
+          <input type="radio" value="1" name="hurikaeri" class="form-control" id="inputModal-radio1">コア業務　　　
+          &emsp;  <input type="radio" value="2" name="hurikaeri" class="form-control" id="inputModal-radio2">注力すべき領域
+          <br>
+          <input type="radio" value="3" name="hurikaeri" class="form-control" id="inputModal-radio3">減らすべき仕事
+          &emsp;  <input type="radio" value="3" name="hurikaeri" class="form-control" id="inputModal-radio4">自己学習　　　
+
+
+        </div>
+      </div>
+      <br>
+
+
           <div class="form-group">
             詳細
             <textarea class="form-control" id="inputModal-detail" placeholder="スケジュールの詳細を記入して下さい" rows="4"></textarea>
@@ -82,6 +80,102 @@
       <div class="modal-footer">
         <button type="button" id="inputModal-save" class="btn btn-primary" data-dismiss="modal">登録</button>
         <button type="button" id="inputModal-cancel" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- プロジェクトモーダル・ダイアログ -->
+<div class="modal fade" id="project-register-Modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">新たなプロジェクトの登録</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInput1">プロジェクト名</label>
+            <input type="text" class="form-control" id="pmodalInput1" placeholder="プロジェクト名">
+          </div>
+          <div class="form-group">
+            <label for="exampleInput2">プロジェクトコード</label>
+            <input type="text" class="form-control" id="pmodalInput2" placeholder="プロジェクトコード　例P4">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInput3">プロジェクトの色</label>
+            <input type="color" class="" id="pmodalInput3" value="#00ff00">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="project-save" class="btn btn-primary"  onclick="projectsave()">登録</button>
+        <button type="button" id="project-cancel" class="btn btn-default"  onclick="projectcancel()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- タスク・ダイアログ -->
+<div class="modal fade" id="code-register-Modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">新たなタスクコードの登録</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInput1">タスク名</label>
+            <input type="text" class="form-control" id="tmodalInput1" placeholder="タスク名">
+          </div>
+          <div class="form-group">
+            <label for="exampleInput2">タスクコード</label>
+            <input type="text" class="form-control" id="tmodalInput2" placeholder="タスクコード　例X1">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInput3">タスクの色</label>
+            <input type="color" class="" id="tmodalInput3" value="#00ff00">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="code-save" class="btn btn-primary"  onclick="codesave()">登録</button>
+        <button type="button" id="code-cancel" class="btn btn-default" onclick="codecancel()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ラベル・ダイアログ -->
+<div class="modal fade" id="label-register-Modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">新たなラベルの登録</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInput1">ラベル名</label>
+            <input type="text" class="form-control" id="lmodalInput1" placeholder="ラベル名">
+          </div>
+          <div class="form-group">
+            <label for="exampleInput2">ラベルコード</label>
+            <input type="text" class="form-control" id="lmodalInput2" placeholder="ラベルコード　例L4">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInput3">ラベルの色</label>
+            <input type="color" class="" id="lmodalInput3" value="#00ff00">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="label-save" class="btn btn-primary"  onclick="labelsave()">登録</button>
+        <button type="button" id="label-cancel" class="btn btn-default" onclick="labelcancel()">キャンセル</button>
       </div>
     </div>
   </div>
