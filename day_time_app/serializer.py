@@ -7,4 +7,4 @@ from .models import Day_time
 class Day_timeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Day_time
-        fields = ("id","title", "place","start","end","project","task","label","hurikaeri","color","delete_flg", "created_date","username")
+        fields = ("id","title", "place","start","end","project","task","label","hurikaeri","color","detail", "delete_flg", "created_date","username")

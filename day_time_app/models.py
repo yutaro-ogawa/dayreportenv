@@ -17,6 +17,7 @@ class Day_time(models.Model):
     label =  models.ForeignKey("label_app.Label")
     hurikaeri = models.IntegerField()
     color = ColorField(default='#FF0000', blank=True, null=True)
+    detail = models.TextField(max_length=5120, blank=True, null=True)
     delete_flg =models.BooleanField(default=False)
     created_date = models.DateField(auto_now_add=True)
     className = models.CharField(max_length=512, blank=True, null=True) # //色用の変更180131

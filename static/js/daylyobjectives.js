@@ -1,6 +1,8 @@
 //---------------------------------------------------------
 // fullCalendar関連の設定
 //---------------------------------------------------------
+
+
 $(function() {
   var calEvent_global = undefined; // モーダル操作用のグローバル変数
   var exists_event_global = false; // イベントのグローバル変数
@@ -44,13 +46,13 @@ $(function() {
 
       timeFormat: 'H:mm', // uppercase H for 24-hour clock
       axisFormat: 'H:mm', //時間軸に表示する時間の表示フォーマットを指定する
-      editable: false, // イベントを編集するか、ドラッグできる
+      editable: true, // イベントを編集するか、ドラッグできる
 
       allDaySlot: false, // 終日表示の枠を表示するか
 
-      eventDurationEditable: false, // イベント期間をドラッグしで変更するかどうか
+      eventDurationEditable: true, // イベント期間をドラッグしで変更するかどうか
 
-      slotEventOverlap: false, // イベントを重ねて表示するか
+      slotEventOverlap: true, // イベントを重ねて表示するか
 
       selectable: true,
 
@@ -237,7 +239,6 @@ $(function() {
   });
 
 });
-
 
 //---------------------------------------------------------
 // その他の設定

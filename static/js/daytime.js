@@ -1,3 +1,7 @@
+var calEvent_global = undefined; // モーダル操作用のグローバル変数
+var start_global = null;
+var end_global = null;
+var project_color_global ="#FF0000";
 //---------------------------------------------------------
 // 最初にリストを読み取る
 //---------------------------------------------------------
@@ -5,17 +9,15 @@ $(document).ready(function() {
   project_Get_selecter();
   task_Get_selecter();
   label_Get_selecter();
+
 });
-
-
-
 
 
 //---------------------------------------------------------
 // fullCalendar関連の設定
 //---------------------------------------------------------
 $(function() {
-  var calEvent_global = undefined; // モーダル操作用のグローバル変数
+
   var exists_event_global = false; // イベントのグローバル変数
 
 
@@ -58,7 +60,7 @@ $(function() {
 
       timeFormat: 'H:mm', // uppercase H for 24-hour clock
       axisFormat: 'H:mm', //時間軸に表示する時間の表示フォーマットを指定する
-
+      timezone: 'Asia/Tokyo', // タイムゾーン設定
       allDaySlot: true, // 終日表示の枠を表示するか
 
       editable: true, // イベントを編集するか、ドラッグできる
@@ -69,19 +71,22 @@ $(function() {
       navLinks: false, // can click day/week names to navigate views
       droppable: true, // イベントをドラッグできるかどうか
 
+
+
+
       select: function(start, end, jsEvent, view) {
         //日の枠内を選択したときの処理
 
         //イベントをクリックしたときの処理　初期表示
         $('#inputModal').on('show.bs.modal', function() {
-          document.getElementById("inputModal-start").value = moment(start).format("H:mm");
-          document.getElementById("inputModal-end").value = moment(end).format("H:mm");
+          document.getElementById("inputModal-start").value = moment(start).format("HH:mm");
+          document.getElementById("inputModal-end").value = moment(end).format("HH:mm");
           document.getElementById("inputModal-place").value = "14F";
           document.getElementById("inputModal-detail").value = "";
           document.getElementById("inputModal-project").value = "1";
           document.getElementById("inputModal-task").value = "2";
           document.getElementById("inputModal-label").value = "2";
-          document.getElementById("inputModal-radio0").checked=true;
+          document.getElementById("inputModal-radio0").checked = true;
         });
 
 
@@ -105,27 +110,27 @@ $(function() {
           var project_id = $("#inputModal-project").val();
           var task_id = $("#inputModal-task").val();
           var label_id = $("#inputModal-label").val();
+          var detail = $("#inputModal-detail").val();
           //振り返りのradioボタン
           var hurikaeri0 = document.getElementById("inputModal-radio0").checked;
           var hurikaeri1 = document.getElementById("inputModal-radio1").checked;
-          var hurikaeri2 =document.getElementById("inputModal-radio2").checked;
+          var hurikaeri2 = document.getElementById("inputModal-radio2").checked;
           var hurikaeri3 = document.getElementById("inputModal-radio3").checked;
           var hurikaeri4 = document.getElementById("inputModal-radio4").checked;
-          var hurikaeri =1;
+          var hurikaeri = 1;
           if (hurikaeri1 == true) {
             hurikaeri = "1";
           } else if (hurikaeri2 == true) {
             hurikaeri = "2";
-          }  else if (hurikaeri3 == true) {
+          } else if (hurikaeri3 == true) {
             hurikaeri = "3";
-          }  else if (hurikaeri4 == true) {
+          } else if (hurikaeri4 == true) {
             hurikaeri = "4";
           } else {
             hurikaeri = "0";
           }
 
-          project_Get_color(project_id); // htmlhiddenの要素を非同期で書き換え
-          var project_color = $("#project_color").val();
+          project_Get_color(project_id); // project_color_globalに色を格納
 
           if (title) {
             eventData_JSON = {
@@ -138,7 +143,8 @@ $(function() {
               task: task_id,
               label: label_id,
               hurikaeri: hurikaeri,
-              color: project_color,
+              color: project_color_global,
+              detail: detail,
             };
             console.log(eventData_JSON);
             daytimeEvent_POST(eventData_JSON);
@@ -153,14 +159,115 @@ $(function() {
       },
 
       eventClick: function(calEvent, jsEvent, view) {
+
         calEvent_global = calEvent; //globalパラメータに渡す
-        //イベントをクリックしたときの処理
+        day_timeEvent_Get(calEvent);
+        console.log(calEvent_global);
+
+        //イベントをクリックしたときの処理　初期表示
         $('#editModal').on('show.bs.modal', function() {
-          document.getElementById("editModalInput1").value = calEvent.title;
+          var title = calEvent_global.title;
+          var index  = title.indexOf("@");
+          title = title.substring(0, index);
+          document.getElementById("editModal-title").value = title;
+          start_day = moment(calEvent_global.start).format("YYYY-MM-DD");
+          //var end_day = moment(end).format("YYYY-MM-DD");
+          document.getElementById("editModal-start").value = moment(calEvent_global.start).format("HH:mm");
+          document.getElementById("editModal-end").value = moment(calEvent_global.end).format("HH:mm");
+          document.getElementById("editModal-place").value = calEvent_global.place;
+          document.getElementById("editModal-detail").value = calEvent_global.detail;
+          document.getElementById("editModal-project").value = calEvent_global.project;
+          document.getElementById("editModal-task").value = calEvent_global.task;
+          document.getElementById("editModal-label").value = calEvent_global.label;
+          document.getElementById("editModal-detail").value = calEvent_global.detail;
+          //振り返りのradioボタン
+
+          if (calEvent_global.hurikaeri == 1) {
+            document.getElementById("editModal-radio1").checked = true;
+          } else if (calEvent_global.hurikaeri == 2) {
+            document.getElementById("editModal-radio2").checked = true;
+          } else if (calEvent_global.hurikaeri == 3) {
+            document.getElementById("editModal-radio3").checked = true;
+          } else if (calEvent_global.hurikaeri == 4) {
+            document.getElementById("editModal-radio4").checked = true;
+          } else {
+            document.getElementById("editModal-radio0").checked = true;
+          }
+
+
         });
-        $('#editModal').modal('show');
-        //モーダルを閉じる動作は下側で定義
-        $('#calendar').fullCalendar('unselect');
+
+
+        //イベントをクリックしたときの処理
+        $('#editModal').modal();
+
+        $("#editModal-cancel").click(function() {
+          // モーダル内のキャンセルボタン
+          $('.modal').find('input').val('');
+          $('#editModal-save').unbind();
+          $('#calendar').fullCalendar('unselect');
+        });
+
+        $("#editModal-save").click(function() {
+
+          //　モーダル内の更新ボタン
+          var id = calEvent_global.id;
+          var title = $("#editModal-title").val();
+          var start_time = $("#editModal-start").val();
+          var start_day = moment(calEvent_global.start).format("YYYY-MM-DD");
+          var end_time = $("#editModal-end").val();
+          //var end_day = moment(end).format("YYYY-MM-DD");
+          var place = $("#editModal-place").val();
+          var project_id = $("#editModal-project").val();
+          var task_id = $("#editModal-task").val();
+          var label_id = $("#editModal-label").val();
+          var detail = $("#editModal-detail").val();
+          //振り返りのradioボタン
+          var hurikaeri0 = document.getElementById("editModal-radio0").checked;
+          var hurikaeri1 = document.getElementById("editModal-radio1").checked;
+          var hurikaeri2 = document.getElementById("editModal-radio2").checked;
+          var hurikaeri3 = document.getElementById("editModal-radio3").checked;
+          var hurikaeri4 = document.getElementById("editModal-radio4").checked;
+          var hurikaeri = 1;
+          if (hurikaeri1 == true) {
+            hurikaeri = "1";
+          } else if (hurikaeri2 == true) {
+            hurikaeri = "2";
+          } else if (hurikaeri3 == true) {
+            hurikaeri = "3";
+          } else if (hurikaeri4 == true) {
+            hurikaeri = "4";
+          } else {
+            hurikaeri = "0";
+          }
+
+          project_Get_color(project_id); // project_color_globalに色を格納
+
+          if (title) {
+            eventData_JSON = {
+              id : id,
+              title: title + '@' + place,
+              place: place,
+              start: start_day + 'T' + start_time,
+              end: start_day + 'T' + end_time,
+              className: "", //色用の変更180131
+              project: project_id,
+              task: task_id,
+              label: label_id,
+              hurikaeri: hurikaeri,
+              color: project_color_global,
+              detail: detail,
+            };
+            console.log(eventData_JSON);
+            daytimeEvent_PUT(eventData_JSON);
+            //calEvent_Get(view);
+            $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+          }
+
+          $('.modal').find('input').val('');
+          $('#editModal-save').unbind();
+          $('#calendar').fullCalendar('unselect');
+        });
       },
 
 
@@ -171,7 +278,9 @@ $(function() {
       //Ajaxで自動取得 eventを自動で描画する
       eventSources: [{
           events: function(start, end, timezone, callback) {
-            var get_url = "../api/day_time?start_date=" + (moment(start).format("YYYY-MM-DD")) + "&end_date=" + (moment(end).format("YYYY-MM-DD"));
+            start_global = start;
+            end_global = end;
+            var get_url = "../api/day_time?start_date=" + (moment(start_global).format("YYYY-MM-DD")) + "&end_date=" + (moment(end_global).format("YYYY-MM-DD"));
             //パラメータで日付をわたす
             console.log(get_url);
             $.ajax({
@@ -219,51 +328,15 @@ $(function() {
 
 
 
+
+
     } //  $('#calendar').fullCalendar
 
   ); //$(function()
 
 
 
-  // 以下モーダルでボタンを押したときの動き
-  $("#editModal-1").click(function() {
-    calEvent_global.title = document.getElementById("editModalInput1").value;
-    $('#calendar').fullCalendar('updateEvent', calEvent_global);
-    eventData_JSON = calEvent2JSON(calEvent_global);
-    calEvent_PUT(eventData_JSON);
-  });
 
-  $("#editModal-2").click(function() {
-    $('#calendar').fullCalendar("removeEvents", calEvent_global.id); //イベント（予定）の削除
-    eventData_JSON = calEvent2JSON(calEvent_global);
-    calEvent_Delete(eventData_JSON);
-  });
-
-
-  $("#editModal-3").click(function() {
-    calEvent_global.title = "◯ ：" + calEvent_global.title.substr(3);
-    calEvent_global.className[0] = "fc-event-success"; //色用の変更180131
-    $('#calendar').fullCalendar('updateEvent', calEvent_global);
-    eventData_JSON = calEvent2JSON(calEvent_global);
-    calEvent_PUT(eventData_JSON);
-
-  });
-
-  $("#editModal-4").click(function() {
-    calEvent_global.title = "△ ：" + calEvent_global.title.substr(3);
-    calEvent_global.className[0] = "fc-event-soso"; //色用の変更180131
-    $('#calendar').fullCalendar('updateEvent', calEvent_global);
-    eventData_JSON = calEvent2JSON(calEvent_global);
-    calEvent_PUT(eventData_JSON);
-  });
-
-  $("#editModal-5").click(function() {
-    calEvent_global.title = "✖ ：" + calEvent_global.title.substr(3);
-    calEvent_global.className[0] = "fc-event-fail"; //色用の変更180131
-    $('#calendar').fullCalendar('updateEvent', calEvent_global);
-    eventData_JSON = calEvent2JSON(calEvent_global);
-    calEvent_PUT(eventData_JSON);
-  });
 
 });
 
@@ -332,8 +405,10 @@ function daytimeEvent_POST(eventData_JSON) {
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
+        sync: false,
     success: function(data) {
       console.log(data);
+      day_timeEvent_GetALL();
     },
     error: function(data) {
       console.log("Ajax create Failed")
@@ -342,15 +417,17 @@ function daytimeEvent_POST(eventData_JSON) {
 }
 
 //PUTでEVENTを編集
-function calEvent_PUT(eventData_JSON) {
+function  daytimeEvent_PUT(eventData_JSON) {
   $.ajax({
     method: "PUT",
-    url: "../api/calevent/" + eventData_JSON.id + "/",
+    url: "../api/day_time/" + eventData_JSON.id + "/",
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
+        sync: false,
     success: function(data) {
-      console.log(data)
+      console.log(data);
+      day_timeEvent_GetALL();
     },
     error: function(data) {
       console.log("Ajax create Failed")
@@ -376,19 +453,39 @@ function calEvent_Delete(eventData_JSON) {
 }
 
 //Eventを取得する
-function calEvent_Get(view) {
-  var get_url = "../api/day_time?start_date=" + (moment(view.start).format("YYYY-MM-DD")) + "&end_date=" + (moment(view.end).format("YYYY-MM-DD"));
+function day_timeEvent_Get(eventData_JSON) {
+  var get_url = "../api/day_time/" + eventData_JSON.id + "/"
   //パラメータで日付をわたす
   console.log(get_url);
-  console.log("aaaa");
   $.ajax({
     method: "GET",
     url: get_url,
     dataType: "json",
     data: "",
     contentType: "application/json",
+    sync: false,
     success: function(data) {
-      console.log("aaaa");
+      calEvent_global = data;
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+function day_timeEvent_GetALL() {
+  var get_url = "../api/day_time?start_date=" + (moment(start_global).format("YYYY-MM-DD")) + "&end_date=" + (moment(end_global).format("YYYY-MM-DD"));
+  //パラメータで日付をわたす
+  console.log(get_url);
+  $.ajax({
+    method: "GET",
+    url: get_url,
+    dataType: "json",
+    data: "",
+    contentType: "application/json",
+    sync: false,
+    success: function(data) {
+      console.log(data);
       $('#calendar').fullCalendar('removeEvents');
       $('#calendar').fullCalendar('addEventSource', data);
     },
@@ -406,6 +503,7 @@ function calEvent_Get(view) {
 //プロジェクトをJsonから取得
 function project_Get_selecter() {
   $("#inputModal-project").children().remove();
+  $("#editModal-project").children().remove();
   var get_url = "../api/project";
   //パラメータで日付をわたす
   console.log(get_url);
@@ -424,6 +522,10 @@ function project_Get_selecter() {
         op.value = this.id; //value値
         op.text = this.title; //テキスト値
         document.getElementById("inputModal-project").appendChild(op);
+        let op2 = document.createElement("option");
+        op2.value = this.id; //value値
+        op2.text = this.title; //テキスト値
+        document.getElementById("editModal-project").appendChild(op2);
       })
     },
     error: function(data) {
@@ -436,6 +538,7 @@ function project_Get_selecter() {
 function task_Get_selecter() {
   var get_url = "../api/code";
   $("#inputModal-task").children().remove();
+  $("#editModal-task").children().remove();
 
   console.log(get_url);
   $.ajax({
@@ -453,6 +556,11 @@ function task_Get_selecter() {
         op.value = this.id; //value値
         op.text = this.title; //テキスト値
         document.getElementById("inputModal-task").appendChild(op);
+        let op2 = document.createElement("option");
+        op2.value = this.id; //value値
+        op2.text = this.title; //テキスト値
+        document.getElementById("editModal-task").appendChild(op2);
+
       })
     },
     error: function(data) {
@@ -465,6 +573,7 @@ function task_Get_selecter() {
 function label_Get_selecter() {
   var get_url = "../api/label";
   $("#inputModal-label").children().remove();
+  $("#editModal-label").children().remove();
 
   console.log(get_url);
   $.ajax({
@@ -482,6 +591,11 @@ function label_Get_selecter() {
         op.value = this.id; //value値
         op.text = this.title; //テキスト値
         document.getElementById("inputModal-label").appendChild(op);
+
+        let op2 = document.createElement("option");
+        op2.value = this.id; //value値
+        op2.text = this.title; //テキスト値
+        document.getElementById("editModal-label").appendChild(op2);
       })
     },
     error: function(data) {
@@ -509,7 +623,7 @@ function project_Get_color(project_id) {
 
     success: function(data) {
       $(data).each(function() {
-        document.getElementById("project_color").value = this.project_color;
+        project_color_global = this.project_color;
 
       });
     },
@@ -628,7 +742,7 @@ function code_POST(code_JSON) {
     dataType: "json",
     data: JSON.stringify(code_JSON),
     contentType: "application/json",
-        async: false,
+    async: false,
     success: function(data) {
       console.log(data);
     },
@@ -680,7 +794,7 @@ function label_POST(label_JSON) {
     dataType: "json",
     data: JSON.stringify(label_JSON),
     contentType: "application/json",
-            async: false,
+    async: false,
     success: function(data) {
       console.log(data);
     },
