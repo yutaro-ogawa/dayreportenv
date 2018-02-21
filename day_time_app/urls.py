@@ -1,14 +1,15 @@
 from rest_framework import routers
-from .views import DaytimeView
+from .views import Day_timeView
+from .views import Day_timeViewSet
 from django.conf.urls import url
 
 
-
-#router = routers.DefaultRouter()
-#router.register(r'calevent',CalEventViewSet)
+# Web api
+router = routers.DefaultRouter()
+router.register(r'day_time',Day_timeViewSet)
 
 app_name = 'day_time_app'
 
 urlpatterns = [
-    url(r'^daytime/', DaytimeView.as_view(), name="daytime"), # 画面
+    url(r'^day_time/', Day_timeView.as_view(), name="day_time"), # 画面
 ]

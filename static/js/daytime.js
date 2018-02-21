@@ -31,6 +31,7 @@ $(function() {
       },
       defaultView: 'agendaWeek',
       firstDay: 1,
+      scrollTime: '07:00:00',
       views: {
         basic: {
           titleFormat: 'M/D ddd',
@@ -39,8 +40,7 @@ $(function() {
         },
         agenda: {
           titleFormat: 'M/D ddd',
-          columnFormat: 'M/D ddd'
-
+          columnFormat: 'M/D ddd',
           // options apply to agendaWeek and agendaDay views
         },
         week: {
@@ -74,8 +74,8 @@ $(function() {
 
         //イベントをクリックしたときの処理　初期表示
         $('#inputModal').on('show.bs.modal', function() {
-          document.getElementById("inputModal-start").value = moment(start).format("hh:mm");
-          document.getElementById("inputModal-end").value = moment(end).format("hh:mm");
+          document.getElementById("inputModal-start").value = moment(start).format("H:mm");
+          document.getElementById("inputModal-end").value = moment(end).format("H:mm");
           document.getElementById("inputModal-place").value = "14F";
           document.getElementById("inputModal-detail").value = "";
           document.getElementById("inputModal-project").value = "1";
@@ -141,7 +141,7 @@ $(function() {
               color: project_color,
             };
             console.log(eventData_JSON);
-            //calEvent_POST(eventData_JSON);
+            daytimeEvent_POST(eventData_JSON);
             //calEvent_Get(view);
             $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
           }
@@ -171,7 +171,7 @@ $(function() {
       //Ajaxで自動取得 eventを自動で描画する
       eventSources: [{
           events: function(start, end, timezone, callback) {
-            var get_url = "../api/calevent?start_date=" + (moment(start).format("YYYY-MM-DD")) + "&end_date=" + (moment(end).format("YYYY-MM-DD"));
+            var get_url = "../api/day_time?start_date=" + (moment(start).format("YYYY-MM-DD")) + "&end_date=" + (moment(end).format("YYYY-MM-DD"));
             //パラメータで日付をわたす
             console.log(get_url);
             $.ajax({
@@ -325,10 +325,10 @@ $.ajaxSetup({
 });
 
 //POSTでEVENTを追加
-function calEvent_POST(eventData_JSON) {
+function daytimeEvent_POST(eventData_JSON) {
   $.ajax({
     method: "POST",
-    url: "../api/calevent/",
+    url: "../api/day_time/",
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
@@ -377,9 +377,10 @@ function calEvent_Delete(eventData_JSON) {
 
 //Eventを取得する
 function calEvent_Get(view) {
-  var get_url = "../api/calevent?start_date=" + (moment(view.start).format("YYYY-MM-DD")) + "&end_date=" + (moment(view.end).format("YYYY-MM-DD"));
+  var get_url = "../api/day_time?start_date=" + (moment(view.start).format("YYYY-MM-DD")) + "&end_date=" + (moment(view.end).format("YYYY-MM-DD"));
   //パラメータで日付をわたす
   console.log(get_url);
+  console.log("aaaa");
   $.ajax({
     method: "GET",
     url: get_url,
@@ -387,7 +388,7 @@ function calEvent_Get(view) {
     data: "",
     contentType: "application/json",
     success: function(data) {
-      console.log(data)
+      console.log("aaaa");
       $('#calendar').fullCalendar('removeEvents');
       $('#calendar').fullCalendar('addEventSource', data);
     },

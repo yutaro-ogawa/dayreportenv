@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'code_app', # 追加アプリ
     'project_app', # 追加アプリ
     'label_app', # 追加アプリ
+    'day_time_app', # 追加アプリ
     'rest_framework', # RESTAPI用
     'colorfield', # 色フィールド用https://github.com/jaredly/django-colorfield
 ]
