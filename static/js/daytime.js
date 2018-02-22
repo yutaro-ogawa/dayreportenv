@@ -1,7 +1,17 @@
 var calEvent_global = undefined; // モーダル操作用のグローバル変数
 var start_global = null;
 var end_global = null;
-var project_color_global ="#FF0000";
+var project_color_global = "#FF0000";
+
+// イベントコピー用のshiftkeyチェック
+var copyKey = false;
+$(document).keydown(function(e) {
+  copyKey = e.shiftKey;
+}).keyup(function() {
+  copyKey = false;
+});
+
+
 //---------------------------------------------------------
 // 最初にリストを読み取る
 //---------------------------------------------------------
@@ -70,6 +80,115 @@ $(function() {
       selectHelper: true,
       navLinks: false, // can click day/week names to navigate views
       droppable: true, // イベントをドラッグできるかどうか
+
+
+
+      // イベントをリサイズしたときに更新する
+      eventResize: function(event, jsEvent, ui, view) {
+
+        calEvent_global = event; //globalパラメータに渡す
+        day_timeEvent_Get(event); // 気持ち悪いが、calEvent_globalにeventが入る
+        console.log(calEvent_global);
+
+        //calevent_globalの値を取得
+        var start_day = moment(event.start).format("YYYY-MM-DD");
+        var start_time = moment(event.start).format("HH:mm");
+        var end_time = moment(event.end).format("HH:mm");
+
+        // PUT操作
+        if (calEvent_global.title) {
+          eventData_JSON = {
+            id: calEvent_global.id,
+            title: calEvent_global.title,
+            place: calEvent_global.place,
+            start: start_day + 'T' + start_time,
+            end: start_day + 'T' + end_time,
+            className: calEvent_global.className, //色用の変更180131
+            project: calEvent_global.project,
+            task: calEvent_global.task,
+            label: calEvent_global.label,
+            hurikaeri: calEvent_global.hurikaeri,
+            color: calEvent_global.color,
+            detail: calEvent_global.detail,
+          };
+        }
+        console.log(eventData_JSON);
+        daytimeEvent_PUT(eventData_JSON);
+        //calEvent_Get(view);
+        $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+
+      },
+
+      //　ドロップしたときに更新する
+      eventDrop: function(event, delta, revertFunc) {
+
+        // 通常のドロップ
+        if (!copyKey) {
+          calEvent_global = event; //globalパラメータに渡す
+          day_timeEvent_Get(event); // 気持ち悪いが、calEvent_globalにeventが入る
+          console.log(calEvent_global);
+
+          //calevent_globalの値を取得
+          var start_day = moment(event.start).format("YYYY-MM-DD");
+          var start_time = moment(event.start).format("HH:mm");
+          var end_time = moment(event.end).format("HH:mm");
+
+          // PUT操作
+          if (calEvent_global.title) {
+            eventData_JSON = {
+              id: calEvent_global.id,
+              title: calEvent_global.title,
+              place: calEvent_global.place,
+              start: start_day + 'T' + start_time,
+              end: start_day + 'T' + end_time,
+              className: calEvent_global.className, //色用の変更180131
+              project: calEvent_global.project,
+              task: calEvent_global.task,
+              label: calEvent_global.label,
+              hurikaeri: calEvent_global.hurikaeri,
+              color: calEvent_global.color,
+              detail: calEvent_global.detail,
+            };
+          }
+          console.log(eventData_JSON);
+          daytimeEvent_PUT(eventData_JSON);
+          //calEvent_Get(view);
+          $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+        }
+        //コピードロップ
+        else {
+          calEvent_global = event; //globalパラメータに渡す
+          day_timeEvent_Get(event); // 気持ち悪いが、calEvent_globalにeventが入る
+          console.log(calEvent_global);
+
+          //calevent_globalの値を取得
+          var start_day = moment(event.start).format("YYYY-MM-DD");
+          var start_time = moment(event.start).format("HH:mm");
+          var end_time = moment(event.end).format("HH:mm");
+
+          // PUT操作
+          if (calEvent_global.title) {
+            eventData_JSON = {
+              title: calEvent_global.title,
+              place: calEvent_global.place,
+              start: start_day + 'T' + start_time,
+              end: start_day + 'T' + end_time,
+              className: calEvent_global.className, //色用の変更180131
+              project: calEvent_global.project,
+              task: calEvent_global.task,
+              label: calEvent_global.label,
+              hurikaeri: 0,
+              color: calEvent_global.color,
+              detail: calEvent_global.detail,
+            };
+          }
+          console.log(eventData_JSON);
+          daytimeEvent_POST(eventData_JSON);
+          //calEvent_Get(view);
+          $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+        }
+
+      },
 
 
 
@@ -156,6 +275,8 @@ $(function() {
           $('#inputModal-save').unbind();
           $('#calendar').fullCalendar('unselect');
         });
+
+
       },
 
       eventClick: function(calEvent, jsEvent, view) {
@@ -167,7 +288,7 @@ $(function() {
         //イベントをクリックしたときの処理　初期表示
         $('#editModal').on('show.bs.modal', function() {
           var title = calEvent_global.title;
-          var index  = title.indexOf("@");
+          var index = title.indexOf("@");
           title = title.substring(0, index);
           document.getElementById("editModal-title").value = title;
           start_day = moment(calEvent_global.start).format("YYYY-MM-DD");
@@ -245,7 +366,7 @@ $(function() {
 
           if (title) {
             eventData_JSON = {
-              id : id,
+              id: id,
               title: title + '@' + place,
               place: place,
               start: start_day + 'T' + start_time,
@@ -260,6 +381,66 @@ $(function() {
             };
             console.log(eventData_JSON);
             daytimeEvent_PUT(eventData_JSON);
+            //calEvent_Get(view);
+            $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+          }
+
+          $('.modal').find('input').val('');
+          $('#editModal-save').unbind();
+          $('#calendar').fullCalendar('unselect');
+        });
+
+        $("#editModal-delete").click(function() {
+          //　モーダル内の削除ボタン
+          var id = calEvent_global.id;
+          var title = $("#editModal-title").val();
+          var start_time = $("#editModal-start").val();
+          var start_day = moment(calEvent_global.start).format("YYYY-MM-DD");
+          var end_time = $("#editModal-end").val();
+          //var end_day = moment(end).format("YYYY-MM-DD");
+          var place = $("#editModal-place").val();
+          var project_id = $("#editModal-project").val();
+          var task_id = $("#editModal-task").val();
+          var label_id = $("#editModal-label").val();
+          var detail = $("#editModal-detail").val();
+          //振り返りのradioボタン
+          var hurikaeri0 = document.getElementById("editModal-radio0").checked;
+          var hurikaeri1 = document.getElementById("editModal-radio1").checked;
+          var hurikaeri2 = document.getElementById("editModal-radio2").checked;
+          var hurikaeri3 = document.getElementById("editModal-radio3").checked;
+          var hurikaeri4 = document.getElementById("editModal-radio4").checked;
+          var hurikaeri = 1;
+          if (hurikaeri1 == true) {
+            hurikaeri = "1";
+          } else if (hurikaeri2 == true) {
+            hurikaeri = "2";
+          } else if (hurikaeri3 == true) {
+            hurikaeri = "3";
+          } else if (hurikaeri4 == true) {
+            hurikaeri = "4";
+          } else {
+            hurikaeri = "0";
+          }
+
+          project_Get_color(project_id); // project_color_globalに色を格納
+
+          if (title) {
+            eventData_JSON = {
+              id: id,
+              title: title + '@' + place,
+              place: place,
+              start: start_day + 'T' + start_time,
+              end: start_day + 'T' + end_time,
+              className: "", //色用の変更180131
+              project: project_id,
+              task: task_id,
+              label: label_id,
+              hurikaeri: hurikaeri,
+              color: project_color_global,
+              detail: detail,
+            };
+            console.log(eventData_JSON);
+            daytimeEvent_Delete(eventData_JSON);
             //calEvent_Get(view);
             $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
           }
@@ -405,7 +586,7 @@ function daytimeEvent_POST(eventData_JSON) {
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
-        sync: false,
+    sync: false,
     success: function(data) {
       console.log(data);
       day_timeEvent_GetALL();
@@ -417,14 +598,14 @@ function daytimeEvent_POST(eventData_JSON) {
 }
 
 //PUTでEVENTを編集
-function  daytimeEvent_PUT(eventData_JSON) {
+function daytimeEvent_PUT(eventData_JSON) {
   $.ajax({
     method: "PUT",
     url: "../api/day_time/" + eventData_JSON.id + "/",
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
-        sync: false,
+    sync: false,
     success: function(data) {
       console.log(data);
       day_timeEvent_GetALL();
@@ -435,22 +616,25 @@ function  daytimeEvent_PUT(eventData_JSON) {
   })
 }
 
-//DeleteでEVENTを削除
-function calEvent_Delete(eventData_JSON) {
+//PUTでEVENTを編集
+function daytimeEvent_Delete(eventData_JSON) {
   $.ajax({
     method: "DELETE",
-    url: "../api/calevent/" + eventData_JSON.id + "/",
+    url: "../api/day_time/" + eventData_JSON.id + "/",
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
+    sync: false,
     success: function(data) {
-      console.log(data)
+      console.log(data);
+      day_timeEvent_GetALL();
     },
     error: function(data) {
       console.log("Ajax create Failed")
     }
   })
 }
+
 
 //Eventを取得する
 function day_timeEvent_Get(eventData_JSON) {
