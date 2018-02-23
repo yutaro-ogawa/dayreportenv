@@ -8,12 +8,10 @@
 {% endblock script%}
 
 {% block body_block%}
-
-<h1>毎日の目標管理</h1>
+ {% if user.is_authenticated %} {% else %}
 <br/>
-<br/> {% if user.is_authenticated %} {% else %}
 <a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
-
+<br/>
 <div id="calendar"></div>
 
 <!-- モーダル・ダイアログ -->

@@ -2,6 +2,7 @@ var calEvent_global = undefined; // モーダル操作用のグローバル変�
 var start_global = null;
 var end_global = null;
 var project_color_global = "#FF0000";
+var csrf_set = false;
 
 // イベントコピー用のshiftkeyチェック
 var copyKey = false;
@@ -12,15 +13,21 @@ $(document).keydown(function(e) {
 });
 
 
+
 //---------------------------------------------------------
 // 最初にリストを読み取る
 //---------------------------------------------------------
 $(document).ready(function() {
-  project_Get_selecter();
-  task_Get_selecter();
-  label_Get_selecter();
+  //project_Get_selecter();
+  //task_Get_selecter();
+  //label_Get_selecter();
 
 });
+
+
+
+
+
 
 
 //---------------------------------------------------------
@@ -34,7 +41,7 @@ $(function() {
 
   $('#calendar').fullCalendar({
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
-      height: 650,
+      height: 600,
       //ヘッダーの設定
       header: {
         left: '',
@@ -71,7 +78,7 @@ $(function() {
       timeFormat: 'H:mm', // uppercase H for 24-hour clock
       axisFormat: 'H:mm', //時間軸に表示する時間の表示フォーマットを指定する
       timezone: 'Asia/Tokyo', // タイムゾーン設定
-      allDaySlot: true, // 終日表示の枠を表示するか
+      allDaySlot: false, // 終日表示の枠を表示するか
 
       editable: true, // イベントを編集するか、ドラッグできる
       eventDurationEditable: true, // イベント期間をドラッグしで変更するかどうか
@@ -567,8 +574,10 @@ function csrfSafeMethod(method) {
   //return (/^(GET|PUT|DELETE|PATCH|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+
 //AJAXの前にcsrftokenをセット
 $.ajaxSetup({
+
   crossDomain: false, // obviates need for sameOrigin test
   beforeSend: function(xhr, settings) {
     if (!csrfSafeMethod(settings.type)) {

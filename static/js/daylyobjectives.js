@@ -9,6 +9,7 @@ $(function() {
 
 
   $('#calendar').fullCalendar({
+      height: 600,
       //参考ページ　https://www.arms-soft.co.jp/blog/1061/
       //ヘッダーの設定
       header: {

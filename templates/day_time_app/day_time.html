@@ -4,14 +4,48 @@
 <link rel="stylesheet" href="{% static '/css/main_daytime.css' %}"></link>
 {% endblock script%} {% block body_block%}
 
-<h1>1日の行動管理</h1>
+{% if user.is_authenticated %}
+{% else %}
 <br/>
-<br/> {% if user.is_authenticated %} {% else %}
-<a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
-
+<a href="{% url 'login' %}?next=/">ログイン画面へ</a>
+{% endif %}
 
 <div id="calendar"></div>
+<form id="daystartform">
+  <div class="form-group">
+    <div class="form-inline">
+      本日の最重要目標：
+      <input type="text" size=100 class="form-control" id="daystartform_1" placeholder="本日の最重要目標"</input>
+      <select class="form-control" id="daystartform_1_select">
+        <option value="0">夜に振り返る</option>
+        <option value="1">◎</option>
+        <option value="2">◯</option>
+        <option value="3">△</option>
 
+      </select>
+
+  </div>
+</br>
+  <div class="form-inline">
+    本日の理想的目標：
+    <input type="text" size=100 class="form-control" id="daystartform_2" placeholder="本日の理想的目標"</input>
+    <select class="form-control" id="daystartform_2_select">
+      <option value="0">夜に振り返る</option>
+      <option value="1">◎</option>
+      <option value="2">◯</option>
+      <option value="3">△</option>
+
+    </select>
+</div>
+</br>
+  <div class="form-inline">
+    　本日のひとこと：
+  <textarea class="form-control" id="daystartform_3" placeholder="本日のひとことを記入してください" cols=98 rows="3"></textarea>
+  &emsp;<button type="button" id="daystartform_button" class="btn btn-primary" onclick="daystart_POST()">▶朝計画を送信</button>
+  </div>
+</br>
+</form>
+</br>
 
 
 

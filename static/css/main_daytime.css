@@ -1,16 +1,27 @@
 body {
   font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
   font-size: 14px;
+  /*background-color:#FFCCCC;*/
 }
+/*
 .flex{
   display: flex;
 }
+*/
 
 
-#calendar_day1 {
+
+#daystartform {
   margin: 0 auto;
   padding: 2%;
 }
+#calendar {
+  margin: 0 auto;
+  padding: 2%;
+}
+
+
+
 
 .fc-sun {
   color: #FF0000;
