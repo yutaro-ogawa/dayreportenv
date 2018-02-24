@@ -38,6 +38,7 @@
         <li><a class="navbar-link" href="{% url 'project_app:project' %}">プロジェクトの管理</a></li>
         <li><a class="navbar-link" href="{% url 'code_app:code' %}">タスクコードの管理</a></li>
         <li><a class="navbar-link" href="{% url 'label_app:label' %}">ラベルの管理</a></li>
+        <li><a class="navbar-link" href="{% url 'slack_app:slack_postcontents' %}">Slackへの投稿内容</a></li>
         {% if user.is_authenticated %}
         {% else %}
         <li><a class="navbar-link" href="{% url 'register' %}">新規ユーザー登録</a></li>

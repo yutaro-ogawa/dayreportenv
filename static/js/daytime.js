@@ -18,10 +18,9 @@ $(document).keydown(function(e) {
 // 最初にリストを読み取る
 //---------------------------------------------------------
 $(document).ready(function() {
-  //project_Get_selecter();
-  //task_Get_selecter();
-  //label_Get_selecter();
-
+  project_Get_selecter();
+  task_Get_selecter();
+  label_Get_selecter();
 });
 
 
