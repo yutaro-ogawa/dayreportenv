@@ -3,6 +3,7 @@ var start_global = null;
 var end_global = null;
 var project_color_global = "#FF0000";
 var csrf_set = false;
+var today_schedule_global = "";
 
 // イベントコピー用のshiftkeyチェック
 var copyKey = false;
@@ -13,6 +14,133 @@ $(document).keydown(function(e) {
 });
 
 
+function daystart_POST() {
+  //文字列として、Slackにpostする内容をapiにpostし画面遷移させる
+
+  today_schedule_GET(),
+
+  // 目標内容をpostする
+  objective_POST();
+  console.log(today_schedule_global);
+  var input1 = $("#daystartform_1").val();
+  var input2 = $("#daystartform_2").val();
+  var input3 = $("#daystartform_3").val();
+  var today = moment(new Date()).format("YYYY-MM-DD");
+  var post_text = '```\n' + today + 'の計画\n' + '重要目標：' + input1 + '\n理想目標：'
+  + input2 + '\n本日のひとこと：' + input3 + '\n\n今日の予定\n' + today_schedule_global + '```';
+  slack_postcontents_POST(post_text);
+  window.location.href = "../slack/"
+}
+
+
+
+// 目標内容をpost
+function objective_POST() {
+  var today = moment(new Date()).format("YYYY-MM-DD");
+  var input1 = $("#daystartform_1").val();
+  eventData_JSON = {
+    title: '重要：' + input1,
+    start: today,
+    end: today,
+    className: "", //色用の変更180131
+  };
+  calEvent_POST(eventData_JSON);
+
+  var input2 = $("#daystartform_2").val();
+  eventData_JSON = {
+    title: '理想：' + input2,
+    start: today,
+    end: today,
+    className: "", //色用の変更180131
+  };
+  calEvent_POST(eventData_JSON);
+}
+
+// 今日のスケジュールをget
+
+function today_schedule_GET() {
+  var get_url = "../api/day_time?start_date=" + (moment(new Date()).format("YYYY-MM-DD")) + "&end_date=" + ((moment(new Date()).add(1, 'days')).format("YYYY-MM-DD"));
+  //パラメータで日付をわたす
+  console.log(get_url);
+  var retdata = $.ajax({
+    method: "GET",
+    url: get_url,
+    dataType: "json",
+    data: "",
+    contentType: "application/json",
+    async: false,
+    success: function(data) {
+      $(data).each(function() {
+        //連想配列をループ処理で値を取り出してtextareaにセットする
+        today_schedule_global = today_schedule_global + this.title + "：";
+        today_schedule_global = today_schedule_global + moment(this.start).format("HH:mm") + '～' + moment(this.end).format("HH:mm");
+        today_schedule_global = today_schedule_global + "\n";
+      })
+      console.log(today_schedule_global)
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  }).responseText;
+  return retdata;
+}
+
+
+// slackへの投稿内容をpost
+function slack_postcontents_POST(post_text) {
+  var get_url = "../api/slack/"
+  payload = {
+    detail: post_text
+  }
+  console.log(get_url);
+  $.ajax({
+    method: "POST",
+    url: get_url,
+    dataType: "json",
+    data: JSON.stringify(payload),
+    contentType: "application/json",
+    async: false,
+    success: function(data) {
+      console.log(data)
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
+
+
+// fullCalendarのeventデータをpostするjson形式に変更する関数です
+function calEvent2JSON(calEvent) {
+  var eventData_JSON = {
+    title: calEvent.title,
+    start: calEvent.start,
+    end: calEvent.end,
+    id: calEvent.id,
+    className: calEvent.className[0], //色用の変更180131
+  };
+  console.log(eventData_JSON);
+
+  return eventData_JSON;
+}
+
+//POSTでEVENTを追加
+function calEvent_POST(eventData_JSON) {
+  $.ajax({
+    method: "POST",
+    url: "../api/calevent/",
+    dataType: "json",
+    data: JSON.stringify(eventData_JSON),
+    contentType: "application/json",
+    async: false,
+    success: function(data) {
+      console.log(data);
+    },
+    error: function(data) {
+      console.log("Ajax create Failed")
+    }
+  })
+}
 
 //---------------------------------------------------------
 // 最初にリストを読み取る
@@ -533,21 +661,6 @@ $(function() {
 // その他の設定
 //---------------------------------------------------------
 
-// fullCalendarのeventデータをpostするjson形式に変更する関数です
-function calEvent2JSON(calEvent) {
-  var eventData_JSON = {
-    title: calEvent.title,
-    start: calEvent.start,
-    end: calEvent.end,
-    id: calEvent.id,
-    className: calEvent.className[0], //色用の変更180131
-  };
-  console.log(eventData_JSON);
-
-  return eventData_JSON;
-}
-
-
 //$(document).ready(function() {
 //CSRF_tokenを取得する
 function getCookie(name) {
@@ -594,7 +707,7 @@ function daytimeEvent_POST(eventData_JSON) {
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
-    sync: false,
+    async: false,
     success: function(data) {
       console.log(data);
       day_timeEvent_GetALL();
@@ -613,7 +726,7 @@ function daytimeEvent_PUT(eventData_JSON) {
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
-    sync: false,
+    async: false,
     success: function(data) {
       console.log(data);
       day_timeEvent_GetALL();
@@ -632,7 +745,7 @@ function daytimeEvent_Delete(eventData_JSON) {
     dataType: "json",
     data: JSON.stringify(eventData_JSON),
     contentType: "application/json",
-    sync: false,
+    async: false,
     success: function(data) {
       console.log(data);
       day_timeEvent_GetALL();
@@ -655,7 +768,7 @@ function day_timeEvent_Get(eventData_JSON) {
     dataType: "json",
     data: "",
     contentType: "application/json",
-    sync: false,
+    async: false,
     success: function(data) {
       calEvent_global = data;
     },
@@ -675,7 +788,7 @@ function day_timeEvent_GetALL() {
     dataType: "json",
     data: "",
     contentType: "application/json",
-    sync: false,
+    async: false,
     success: function(data) {
       console.log(data);
       $('#calendar').fullCalendar('removeEvents');

@@ -5,9 +5,10 @@
 
 <h1>slackへの投稿内容</h1>
 <br/>
-<textarea class="form-control" id="slack_post" placeholder="slackへの投稿内容です" cols=98 rows="10"></textarea>
+<textarea class="form-control" id="slack_post" placeholder="slackへの投稿内容です" cols=98 rows="20"></textarea>
 <br/>
-<button type="button" id="slack_post_button" class="btn btn-primary" onclick="slack_POST()">▶slackへ送信</button>
+<button type="button" id="slack_post_button" class="btn btn-primary" onclick="slack_POST1()">▶slack（開技）へ送信</button>
+&emsp;<button type="button" id="slack_post_button" class="btn btn-primary" onclick="slack_POST2()">▶slack（WSI）へ送信</button>
 {% if user.is_authenticated %}
 
 {% else %}
