@@ -41,7 +41,7 @@ function slack_POST1() {
   }
   $.ajax({
     method: "POST",
-    url: "https://hooks.slack.com/services/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",
+    url: "https://hooks.slack.com/services/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",
     dataType: "text",
     data: JSON.stringify(payload),
     success: function(data) {

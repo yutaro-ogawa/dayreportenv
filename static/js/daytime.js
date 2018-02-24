@@ -249,7 +249,7 @@ $(function() {
         console.log(eventData_JSON);
         daytimeEvent_PUT(eventData_JSON);
         //calEvent_Get(view);
-        $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+        //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
 
       },
 
@@ -287,7 +287,7 @@ $(function() {
           console.log(eventData_JSON);
           daytimeEvent_PUT(eventData_JSON);
           //calEvent_Get(view);
-          $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+          //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
         }
         //コピードロップ
         else {
@@ -319,7 +319,7 @@ $(function() {
           console.log(eventData_JSON);
           daytimeEvent_POST(eventData_JSON);
           //calEvent_Get(view);
-          $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+          //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
         }
 
       },
@@ -337,8 +337,8 @@ $(function() {
           document.getElementById("inputModal-place").value = "14F";
           document.getElementById("inputModal-detail").value = "";
           document.getElementById("inputModal-project").value = "1";
-          document.getElementById("inputModal-task").value = "2";
-          document.getElementById("inputModal-label").value = "2";
+          document.getElementById("inputModal-task").value = "1";
+          document.getElementById("inputModal-label").value = "1";
           document.getElementById("inputModal-radio0").checked = true;
         });
 
@@ -402,7 +402,7 @@ $(function() {
             console.log(eventData_JSON);
             daytimeEvent_POST(eventData_JSON);
             //calEvent_Get(view);
-            $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+            //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
           }
 
           $('.modal').find('input').val('');
@@ -516,7 +516,7 @@ $(function() {
             console.log(eventData_JSON);
             daytimeEvent_PUT(eventData_JSON);
             //calEvent_Get(view);
-            $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+            //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
           }
 
           $('.modal').find('input').val('');
@@ -576,7 +576,7 @@ $(function() {
             console.log(eventData_JSON);
             daytimeEvent_Delete(eventData_JSON);
             //calEvent_Get(view);
-            $('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
+            //$('#calendar').fullCalendar('renderEvent', eventData_JSON, true); // stick? = true
           }
 
           $('.modal').find('input').val('');

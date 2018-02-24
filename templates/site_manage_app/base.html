@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>ddd</title>
+  <title>Life-Navi</title>
   <!-- Bootstrap CSS ver3 -->
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
@@ -35,9 +35,14 @@
         <li><a class="navbar-link" href="{% url 'admin:index' %}">Admin(暫定)</a></li>
         <li><a class="navbar-link" href="{% url 'dayreport_app:dayreport' %}">毎日の目標管理</a></li>
         <li><a class="navbar-link" href="{% url 'day_time_app:day_time' %}">一日の時間管理</a></li>
-        <li><a class="navbar-link" href="{% url 'project_app:project' %}">プロジェクトの管理</a></li>
-        <li><a class="navbar-link" href="{% url 'code_app:code' %}">タスクコードの管理</a></li>
-        <li><a class="navbar-link" href="{% url 'label_app:label' %}">ラベルの管理</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">各種設定<span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+            <li><a class="navbar-link" href="{% url 'project_app:project' %}">プロジェクトの管理</a></li>
+            <li><a class="navbar-link" href="{% url 'code_app:code' %}">タスクコードの管理</a></li>
+            <li><a class="navbar-link" href="{% url 'label_app:label' %}">ラベルの管理</a></li>
+          </ul>
+        </li>
         <li><a class="navbar-link" href="{% url 'slack_app:slack_postcontents' %}">Slackへの投稿内容</a></li>
         {% if user.is_authenticated %}
         {% else %}
