@@ -1,0 +1,16 @@
+{% extends "site_manage_app/base.html"%} {% load static %} {% block script %}
+<script src="{% static 'js/slack.js' %}"></script>
+<link rel="stylesheet" href="{% static 'fullcalendar380/css/fullcalendar.min.css' %}"></link>
+{% endblock script%} {% block body_block%}
+
+<h1>slackへの投稿内容</h1>
+<br/>
+<textarea class="form-control" id="slack_post" placeholder="slackへの投稿内容です" cols=98 rows="20"></textarea>
+<br/>
+<button type="button" id="slack_post_button" class="btn btn-primary" onclick="slack_POST1()">▶slack（開技）へ送信</button>
+&emsp;<button type="button" id="slack_post_button" class="btn btn-primary" onclick="slack_POST2()">▶slack（WSI）へ送信</button>
+{% if user.is_authenticated %}
+
+{% else %}
+<a href="{% url 'login' %}?next=/">ログイン画面へ</a> {% endif %}
+{% endblock %}

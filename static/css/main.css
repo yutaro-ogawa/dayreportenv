@@ -1,0 +1,56 @@
+body {
+  font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+  font-size: 14px;
+}
+
+#calendar {
+  margin: 0 auto;
+  padding: 2%;
+}
+
+.fc-sun {
+  color: #FF0000;
+}
+
+.fc-sat {
+  color: #0000FF;
+}
+.fc-event{
+color: #444444;
+background-color: #fff;
+border: #fff;
+}
+
+.fc-holiday-event{
+color: #fff !important;
+background-color: #ff0000 !important;
+border: #ff0000 !important;
+pointer-events: none; /*リンクを無効化する*/
+}
+
+
+.fc-event:hover {
+color: #000;
+}
+.fc-month-view span.fc-title{
+       white-space: normal;
+ }
+
+
+ .fc-event-success{ /*//色用の変更180131*/
+ color: #1f661f;
+ background-color: #fff;
+ border: #fff;
+ }
+
+ .fc-event-soso{ /*//色用の変更180131*/
+ color: #327387;
+ background-color: #fff;
+ border: #fff;
+ }
+
+ .fc-event-fail{ /*//色用の変更180131*/
+ color: #959b95;
+ background-color: #fff;
+ border: #fff;
+ }
