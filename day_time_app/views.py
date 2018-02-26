@@ -32,9 +32,15 @@ class Day_timeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # ここで、フィルターして自分のだけを表示している
+<<<<<<< HEAD
         queryset = Day_time.objects.filter(username=self.request.user).order_by('start')
         # delete_flgのチェック
         #queryset = queryset.filter(delete_flg=False)
+=======
+        queryset = Day_time.objects.filter(username=self.request.user)
+        # delete_flgのチェック
+        queryset = Day_time.objects.filter(delete_flg=False)
+>>>>>>> origin/master
 
         # 日付の指定
         if "start_date" in self.request.GET:
@@ -54,8 +60,11 @@ class Day_timeViewSet(viewsets.ModelViewSet):
             # 日付のフィルター
             queryset = queryset.filter(start__range=[start_date, end_date])
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/master
         return queryset
 
     def perform_create(self, serializer):

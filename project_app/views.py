@@ -33,7 +33,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
         # ここで、フィルターして自分のだけを表示している
         queryset = Project.objects.filter(username=self.request.user)
         # delete_flgのチェック
+<<<<<<< HEAD
         queryset = queryset.filter(delete_flg=False)
+=======
+        queryset = Project.objects.filter(delete_flg=False)
+>>>>>>> origin/master
 
         return queryset
 

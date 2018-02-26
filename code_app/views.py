@@ -31,7 +31,12 @@ class CodeViewSet(viewsets.ModelViewSet):
         # ここで、フィルターして自分のだけを表示している
         queryset = Code.objects.filter(username=self.request.user)
         # delete_flgのチェック
+<<<<<<< HEAD
         queryset = queryset.filter(delete_flg=False)
+=======
+        queryset = Code.objects.filter(delete_flg=False)
+
+>>>>>>> origin/master
         return queryset
 
     def perform_create(self, serializer):

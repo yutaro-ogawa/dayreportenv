@@ -34,7 +34,11 @@ class LabelViewSet(viewsets.ModelViewSet):
         # ここで、フィルターして自分のだけを表示している
         queryset = Label.objects.filter(username=self.request.user)
         # delete_flgのチェック
+<<<<<<< HEAD
         queryset = queryset.filter(delete_flg=False)
+=======
+        queryset = Label.objects.filter(delete_flg=False)
+>>>>>>> origin/master
 
         return queryset
 
