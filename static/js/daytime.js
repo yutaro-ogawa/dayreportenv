@@ -72,13 +72,8 @@ function today_schedule_GET() {
     success: function(data) {
       $(data).each(function() {
         //連想配列をループ処理で値を取り出してtextareaにセットする
-<<<<<<< HEAD
         today_schedule_global = today_schedule_global + moment(this.start).format("HH:mm") + '～' + moment(this.end).format("HH:mm");
         today_schedule_global = today_schedule_global + "：" + this.title;
-=======
-        today_schedule_global = today_schedule_global + this.title + "：";
-        today_schedule_global = today_schedule_global + moment(this.start).format("HH:mm") + '～' + moment(this.end).format("HH:mm");
->>>>>>> origin/master
         today_schedule_global = today_schedule_global + "\n";
       })
       console.log(today_schedule_global)

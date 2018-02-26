@@ -48,10 +48,7 @@ INSTALLED_APPS = [
     'slack_app', # 追加アプリ
     'rest_framework', # RESTAPI用
     'colorfield', # 色フィールド用https://github.com/jaredly/django-colorfield
-<<<<<<< HEAD
     'corsheaders', # CORS用
-=======
->>>>>>> origin/master
 ]
 
 MIDDLEWARE = [
@@ -61,18 +58,12 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-<<<<<<< HEAD
     'corsheaders.middleware.CorsMiddleware', # CORS用
     'django.middleware.common.CommonMiddleware', # CORS用
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False # CORS用　true危険
 
-=======
-]
-
->>>>>>> origin/master
 ROOT_URLCONF = 'dayreportpro.urls'
 
 TEMPLATES = [

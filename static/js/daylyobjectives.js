@@ -219,6 +219,8 @@ $(function() {
     calEvent_global.className[0] = "fc-event-success"; //色用の変更180131
     $('#calendar').fullCalendar('updateEvent', calEvent_global);
     eventData_JSON = calEvent2JSON(calEvent_global);
+    console.log(calEvent_global)
+    console.log("111")
     calEvent_PUT(eventData_JSON);
 
   });
@@ -250,7 +252,7 @@ function calEvent2JSON(calEvent) {
   var eventData_JSON = {
     title: calEvent.title,
     start: calEvent.start,
-    end: calEvent.end,
+    end: calEvent.start,
     id: calEvent.id,
     className: calEvent.className[0],//色用の変更180131
   };
