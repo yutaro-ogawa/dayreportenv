@@ -33,7 +33,7 @@ class Day_timeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # ここで、フィルターして自分のだけを表示している
 
-        queryset = Day_time.objects.filter(username=self.request.user).order_by('start')
+        queryset = Day_time.objects.all().order_by('start').filter(username=self.request.user)
         # delete_flgのチェック
         #queryset = queryset.filter(delete_flg=False)
 
@@ -53,9 +53,10 @@ class Day_timeViewSet(viewsets.ModelViewSet):
 
             print(start_date)
             print(end_date)
-            # 日付のフィルター
+            # 日付のフィルター　全部のフィルターを反映
+            queryset = Day_time.objects.all().filter(username=self.request.user)
             queryset = queryset.filter(start__range=[start_date, end_date])
-
+            queryset = queryset.order_by('start')
         return queryset
 
     def perform_create(self, serializer):

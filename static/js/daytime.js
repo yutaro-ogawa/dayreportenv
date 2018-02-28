@@ -44,8 +44,9 @@ function objective_POST() {
     end: today,
     className: "", //色用の変更180131
   };
-  calEvent_POST(eventData_JSON);
-
+  if(input1){
+    calEvent_POST(eventData_JSON);
+  }
   var input2 = $("#daystartform_2").val();
   eventData_JSON = {
     title: '理想：' + input2,
@@ -53,7 +54,9 @@ function objective_POST() {
     end: today,
     className: "", //色用の変更180131
   };
-  calEvent_POST(eventData_JSON);
+  if(input2){
+    calEvent_POST(eventData_JSON);
+  }
 }
 
 // 今日のスケジュールをget
