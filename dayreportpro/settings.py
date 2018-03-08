@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'label_app', # 追加アプリ
     'day_time_app', # 追加アプリ
     'slack_app', # 追加アプリ
+    'sprintboard', # 追加アプリ
     'rest_framework', # RESTAPI用
     'colorfield', # 色フィールド用https://github.com/jaredly/django-colorfield
     'corsheaders', # CORS用

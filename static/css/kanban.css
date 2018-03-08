@@ -1,7 +1,32 @@
-
+/*https://bootsnipp.com/snippets/5K2P8*/
 img {
     vertical-align: middle;
 }
+
+/*.panel-heading {
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+}*/
+
+.btn-default{
+  font-size: 12px;
+}
+.panel-heading{
+  background-image: linear-gradient(to bottom,#AF97DC 0,#AF97DC 100%) !important;
+  background-color: #AF97DC !important;
+  border-color: #AF97DC !important;
+  padding: 5px 10px !important;
+  height: 40px;
+  display: flex;
+  	align-items: center;
+}
+
+.panel-primary {
+    border-color: #AF97DC;
+}
+
+
 
 .img-responsive {
     display: block;
@@ -272,8 +297,8 @@ img {
                     }
 
                 .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h2 {
-                    font-size: 16px;
-                    margin-bottom: 10px;
+                    font-size: 14px;
+                    margin-bottom: 7px;
                 }
 
                     .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h2 a {
@@ -312,8 +337,8 @@ img {
         }
 
 .kanban-col {
-    width: 300px;
-    margin-right: 20px;
+    width: 190px;
+    margin-right: 10px;
     float: left;
 }
 
@@ -324,11 +349,7 @@ img {
 
 
 
-/*.panel-heading {
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
-    cursor: grab;
-}*/
+
 
 .grab {
     cursor: -moz-grab;

@@ -1,69 +1,99 @@
-{% extends "site_manage_app/base.html"%}
-{% load static %}
-
-{% block script %}
+{% extends "site_manage_app/base.html"%} {% load static %} {% block script %}
 <script src="{% static 'js/index.js' %}"></script>
 <script src="{% static 'js/kanban.js' %}"></script>
 <link rel="stylesheet" href="{% static 'fullcalendar380/css/custom.css' %}"></link>
 <link rel="stylesheet" href="{% static '/css/kanban.css' %}"></link>
-{% endblock script%}
+{% endblock script%} {% block body_block%}
 
-{% block body_block%}
-
-<h1 ><font color="#AF97DC">ようこそ、Life-Navigatorへ</font></h1>
+<h1><font color="#AF97DC">ようこそ、Life-Navigatorへ</font></h1>
 <br/>
+
+
 <div class="container-fluid" style="min-width: 1050px;">
-        <div id="sortableKanbanBoards" class="row">
-            <div class="col-md-10 col-md-offset-1">
-                            <div class="panel panel-primary kanban-col">
-                <div class="panel-heading">
-                    TODO
-                    <i class="fa fa-2x fa-plus-circle pull-right"></i>
-                </div>
-                <div class="panel-body" style="max-height: 401px;">
-                    <div id="TODO" class="kanban-centered">
+  <div id="sortableKanbanBoards" class="row">
+    <div>
+      <div class="panel panel-primary kanban-col">
+        <div class="panel-heading">
+          ICE BOX　 　<button id="btn-add-task" class="btn btn-default">Add Task</button>
+          <i class="fa fa-2x fa-plus-circle pull-right"></i>
 
-                    <article class="kanban-entry grab" id="item0" draggable="true"><div class="kanban-entry-inner"><div class="kanban-label"><h2>qwdq</h2></div></div></article><article class="kanban-entry grab" id="item1" draggable="true"><div class="kanban-entry-inner"><div class="kanban-label"><h2>wdq</h2></div></div></article><article class="kanban-entry grab" id="item2" draggable="true"><div class="kanban-entry-inner"><div class="kanban-label"><h2>wdqqeqe</h2></div></div></article><article class="kanban-entry grab" id="item3" draggable="true"><div class="kanban-entry-inner"><div class="kanban-label"><h2>wqe</h2></div></div></article></div>
-                </div>
-            </div>
-            <div class="panel panel-primary kanban-col">
-                <div class="panel-heading">
-                    DOING
-                    <i class="fa fa-2x fa-plus-circle pull-right"></i>
-                </div>
-                <div class="panel-body" style="max-height: 401px;">
-                    <div id="DOING" class="kanban-centered">
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-primary kanban-col">
-                <div class="panel-heading">
-                    DONE
-                    <i class="fa fa-2x fa-plus-circle pull-right"></i>
-                </div>
-                <div class="panel-body" style="max-height: 401px;">
-                    <div id="DONE" class="kanban-centered">
-                    </div>
-                </div>
-            </div>
-                <div class="col-md-2">
-                    <button id="btn-add-task" class="btn btn-primary">Add Task</button>
-                </div>
-            </div>
         </div>
+        <div class="panel-body" style="max-height: 301px;">
+          <div id="ICEBOX" class="kanban-centered">
+
+            <article class="kanban-entry grab" id="item0" draggable="true">
+              <div class="kanban-entry-inner">
+                <div class="kanban-label">
+                  <h2>qwdq</h2></div>
+              </div>
+            </article>
+
+          </div>
         </div>
+      </div>
+      <div class="panel panel-primary kanban-col">
+        <div class="panel-heading">
+          WAITING
+          <i class="fa fa-2x fa-plus-circle pull-right"></i>
+        </div>
+        <div class="panel-body" style="max-height: 201px;">
+          <div id="WAITING" class="kanban-centered">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-primary kanban-col">
+        <div class="panel-heading">
+          SPRINT BACKLOG
+          <i class="fa fa-2x fa-plus-circle pull-right"></i>
+        </div>
+        <div class="panel-body" style="max-height: 401px;">
+          <div id="SPRINTBACKLOG" class="kanban-centered">
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-primary kanban-col">
+        <div class="panel-heading">
+          DOING
+          <i class="fa fa-2x fa-plus-circle pull-right"></i>
+        </div>
+        <div class="panel-body" style="max-height: 401px;">
+          <div id="DOING" class="kanban-centered">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-primary kanban-col">
+        <div class="panel-heading">
+          DONE
+          <i class="fa fa-2x fa-plus-circle pull-right"></i>
+        </div>
+        <div class="panel-body" style="max-height: 401px;">
+          <div id="DONE" class="kanban-centered">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-primary kanban-col">
+        <div class="panel-heading">
+          TRASH　　　　<button id="btn-delete-task" class="btn btn-default">Delete</button>
+          <i class="fa fa-2x fa-plus-circle pull-right"></i>
+        </div>
+        <div class="panel-body" style="max-height: 401px;">
+          <div id="TRASH" class="kanban-centered">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
-<br/>
-{% if user.is_authenticated %}
-<a href="{% url 'dayreport_app:dayreport' %}">毎日の目標管理画面へ</a>
-
-{% else %}
+<br/> {% if user.is_authenticated %}
+<a href="{% url 'dayreport_app:dayreport' %}">毎日の目標管理画面へ</a> {% else %}
 <a href="{% url 'login' %}?next=/dayreport">ログイン画面へ</a>
 <br/>
 <br/>
 <p><a href="{% url 'register' %}?next=/dayreport">新規ユーザー登録はこちら</a></p>
-{% endif %}
-
-{% endblock %}
+{% endif %} {% endblock %}
