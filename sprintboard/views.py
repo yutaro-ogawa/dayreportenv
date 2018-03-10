@@ -33,7 +33,8 @@ class SprintBoardViewSet(viewsets.ModelViewSet):
         # ここで、フィルターして自分のだけを表示している
 
         queryset = SprintBoard.objects.all().filter(username=self.request.user)
-
+        queryset = queryset.order_by('number').reverse()
+        
         # delete_flgのチェック
         queryset = queryset.filter(delete_flg=False)
         return queryset

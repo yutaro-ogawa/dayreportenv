@@ -9,7 +9,7 @@ from colorfield.fields import ColorField# 色を使えるように拡張
 class SprintBoard(models.Model):
     #id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=512)
-    belonging_id = models.IntegerField(blank=True, null=True)
+    belonging_id = models.CharField(max_length=512, blank=True, null=True)
     number = models.IntegerField(blank=True, null=True)
     project = models.ForeignKey("project_app.Project", blank=True, null=True)
     color = ColorField(default='#FF0000', blank=True, null=True)

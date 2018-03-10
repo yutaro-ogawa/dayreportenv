@@ -1,92 +1,11 @@
 {% extends "site_manage_app/base.html"%} {% load static %} {% block script %}
 <script src="{% static 'js/index.js' %}"></script>
-<script src="{% static 'js/kanban.js' %}"></script>
 <link rel="stylesheet" href="{% static 'fullcalendar380/css/custom.css' %}"></link>
-<link rel="stylesheet" href="{% static '/css/kanban.css' %}"></link>
 {% endblock script%} {% block body_block%}
 
 <h1><font color="#AF97DC">ようこそ、Life-Navigatorへ</font></h1>
 <br/>
 
-
-<div class="container-fluid" style="min-width: 1050px;">
-  <div id="sortableKanbanBoards" class="row">
-    <div>
-      <div class="panel panel-primary kanban-col">
-        <div class="panel-heading">
-          ICE BOX　 　<button id="btn-add-task" class="btn btn-default">Add Task</button>
-          <i class="fa fa-2x fa-plus-circle pull-right"></i>
-
-        </div>
-        <div class="panel-body" style="max-height: 301px;">
-          <div id="ICEBOX" class="kanban-centered">
-
-            <article class="kanban-entry grab" id="item0" draggable="true">
-              <div class="kanban-entry-inner">
-                <div class="kanban-label">
-                  <h2>qwdq</h2></div>
-              </div>
-            </article>
-
-          </div>
-        </div>
-      </div>
-      <div class="panel panel-primary kanban-col">
-        <div class="panel-heading">
-          WAITING
-          <i class="fa fa-2x fa-plus-circle pull-right"></i>
-        </div>
-        <div class="panel-body" style="max-height: 201px;">
-          <div id="WAITING" class="kanban-centered">
-          </div>
-        </div>
-      </div>
-
-      <div class="panel panel-primary kanban-col">
-        <div class="panel-heading">
-          SPRINT BACKLOG
-          <i class="fa fa-2x fa-plus-circle pull-right"></i>
-        </div>
-        <div class="panel-body" style="max-height: 401px;">
-          <div id="SPRINTBACKLOG" class="kanban-centered">
-          </div>
-        </div>
-      </div>
-      <div class="panel panel-primary kanban-col">
-        <div class="panel-heading">
-          DOING
-          <i class="fa fa-2x fa-plus-circle pull-right"></i>
-        </div>
-        <div class="panel-body" style="max-height: 401px;">
-          <div id="DOING" class="kanban-centered">
-          </div>
-        </div>
-      </div>
-
-      <div class="panel panel-primary kanban-col">
-        <div class="panel-heading">
-          DONE
-          <i class="fa fa-2x fa-plus-circle pull-right"></i>
-        </div>
-        <div class="panel-body" style="max-height: 401px;">
-          <div id="DONE" class="kanban-centered">
-          </div>
-        </div>
-      </div>
-
-      <div class="panel panel-primary kanban-col">
-        <div class="panel-heading">
-          TRASH　　　　<button id="btn-delete-task" class="btn btn-default">Delete</button>
-          <i class="fa fa-2x fa-plus-circle pull-right"></i>
-        </div>
-        <div class="panel-body" style="max-height: 401px;">
-          <div id="TRASH" class="kanban-centered">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 
